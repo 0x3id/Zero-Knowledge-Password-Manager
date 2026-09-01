@@ -1,9 +1,792 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* ═══════════════════════════════════════════════════════════════════════════
+    ZeroKnowledgePM — Zero-Knowledge Password Manager Theme System
+    "Vault Console" visual language: a quiet security instrument panel.
+    Solid elevated surfaces (no frosted translucency, no textures), 1px
+    hairline borders, deep steel-navy dark mode (#0F1720), a phosphor
+    transit-accent (#3ECF8E) reserved for live state, Space Grotesk /
+    Inter / JetBrains Mono type, and full RTL Arabic support.
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    Themes are toggled with a `data-theme="dark" | "light"` attribute on
+    <html> (kept in sync with Tailwind's `.dark` class so every `dark:`
+    utility keeps working). All palettes are driven by the --zkpm-* custom
+    properties below so existing components pick up the palette through
+    var() without markup changes.
+
+    NOTE: This project runs Tailwind v3 — all utilities (shadow-glass,
+    backdrop-blur-glass, etc.) are defined in tailwind.config.js. Custom
+    CSS lives in @layer utilities below.
+    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── SidebarComponent: mini icon-rail collapse (desktop only) ──────────────
+   When the desktop sidebar is collapsed into a mini rail it carries the
+   `data-collapsed="true"` attribute. These rules hide text labels and centre
+   the icon tiles. Logical properties keep RTL/LTR symmetry. The mobile
+   drawer (>= 1024px hidden, < 1024px full) never has this attribute. */
+.sidebar-desktop[data-collapsed="true"] .sidebar-text { display: none; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-brand { justify-content: center; padding-inline: 0; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-quick-row { flex-direction: column; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-quick { padding-inline: 0; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-nav { padding-inline: 6px; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-item { justify-content: center; padding-inline: 0; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-group { justify-content: center; padding-inline: 0; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-chevron { display: none; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-user { justify-content: center; padding-inline: 0; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-controls { justify-content: center; gap: 0.25rem; }
+.sidebar-desktop[data-collapsed="true"] .sidebar-controls .theme-toggle-btn span,
+.sidebar-desktop[data-collapsed="true"] .sidebar-controls .relative span:last-child { display: none; }
+
+/* ── Mobile drawer slide (direction-aware) ─────────────────────────────────
+   The off-canvas drawer sits against the inline-START edge (left in LTR,
+   right in RTL). Transforms cannot use logical letterspacing, so we flip a
+   multiplier via `:dir(rtl)` and apply it to the horizontal slide. Applied
+   together with Alpine's `x-transition` classes for smooth enter/leave. */
+.drawer-slide-zero { transform: translateX(0); }
+.drawer-slide-in  { transform: translateX(calc(var(--drawer-dir, 1) * -100%)); }
+.drawer-slide-out { transform: translateX(calc(var(--drawer-dir, 1) * -100%)); }
+
+:dir(rtl) {
+    --drawer-dir: -1;
+}
+:dir(ltr) {
+    --drawer-dir: 1;
+}
+
+@layer base {
+
+    /* ── Vault Console Design Tokens ────────────────
+       Light mode (default at runtime unless the user chose dark; the app
+       favours dark so the no-flicker bootstrap defaults to dark). Soft
+       "paper" surfaces with a green console accent. */
+    :root,
+    [data-theme="light"] {
+        --vc-bg: #f6f8fa;
+        --vc-surface: #ffffff;
+        --vc-surface-2: #eef2f5;
+        --vc-border: #dce3ea;
+        --vc-text: #16212c;
+        --vc-text-dim: #5a6b7b;
+        --vc-accent: #1f9d6b;
+        --vc-accent-soft: rgba(31, 157, 107, 0.10);
+        --vc-warn: #b9791f;
+        --vc-warn-soft: rgba(185, 121, 31, 0.10);
+        --vc-danger: #c4453b;
+        --vc-shadow: 0 8px 24px rgba(20, 30, 40, 0.08);
+
+        /* Legacy --zkpm-* aliases → Vault Console palette (light). */
+        --zkpm-bg: var(--vc-bg);
+        --zkpm-surface: var(--vc-surface);
+        --zkpm-surface-alt: var(--vc-surface-2);
+        --zkpm-border: var(--vc-border);
+        --zkpm-border-hover: color-mix(in srgb, var(--vc-border) 72%, var(--vc-text) 28%);
+        --zkpm-text-primary: var(--vc-text);
+        --zkpm-text-secondary: var(--vc-text-dim);
+        --zkpm-text-muted: color-mix(in srgb, var(--vc-text-dim) 82%, var(--vc-text) 18%);
+        --zkpm-accent: var(--vc-accent);
+        --zkpm-accent-hover: color-mix(in srgb, var(--vc-accent) 88%, #ffffff 12%);
+        --zkpm-accent-glow: var(--vc-accent-soft);
+        --zkpm-danger: var(--vc-danger);
+        --zkpm-success: var(--vc-accent);
+        --zkpm-warning: var(--vc-warn);
+
+        /* Solid console surfaces (glassmorphism retired). */
+        --zkpm-glass-bg: var(--vc-surface);
+        --zkpm-glass-bg-strong: var(--vc-surface-2);
+        --zkpm-glass-border: var(--vc-border);
+        --zkpm-glass-edge: var(--vc-border);
+        --zkpm-glass-edge-strong: var(--vc-accent);
+        --zkpm-glass-glow: 0 0 0 1px var(--vc-accent-soft), 0 4px 18px -6px rgba(20, 30, 40, 0.18);
+        --zkpm-glass-blur: 0px;
+        --zkpm-radius: 0.875rem;
+        --zkpm-radius-lg: 0.875rem;
+        --zkpm-shadow: var(--vc-shadow);
+        --zkpm-shadow-sm: 0 2px 10px rgba(20, 30, 40, 0.06);
+    }
+
+    /* ── Dark Mode Override — deep steel-navy console ── */
+    [data-theme="dark"] {
+        --vc-bg: #0f1720;
+        --vc-surface: #16212c;
+        --vc-surface-2: #1c2934;
+        --vc-border: #263241;
+        --vc-text: #e8edf2;
+        --vc-text-dim: #8da0b3;
+        --vc-accent: #3ecf8e;
+        --vc-accent-soft: rgba(62, 207, 142, 0.12);
+        --vc-warn: #e2a33d;
+        --vc-warn-soft: rgba(226, 163, 61, 0.12);
+        --vc-danger: #e2574c;
+        --vc-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+
+        /* Legacy --zkpm-* aliases → Vault Console palette (dark). */
+        --zkpm-bg: var(--vc-bg);
+        --zkpm-surface: var(--vc-surface);
+        --zkpm-surface-alt: var(--vc-surface-2);
+        --zkpm-border: var(--vc-border);
+        --zkpm-border-hover: color-mix(in srgb, var(--vc-border) 62%, var(--vc-text) 38%);
+        --zkpm-text-primary: var(--vc-text);
+        --zkpm-text-secondary: var(--vc-text-dim);
+        --zkpm-text-muted: color-mix(in srgb, var(--vc-text-dim) 80%, var(--vc-bg) 20%);
+        --zkpm-accent: var(--vc-accent);
+        --zkpm-accent-hover: color-mix(in srgb, var(--vc-accent) 88%, #ffffff 12%);
+        --zkpm-accent-glow: var(--vc-accent-soft);
+        --zkpm-danger: var(--vc-danger);
+        --zkpm-success: var(--vc-accent);
+        --zkpm-warning: var(--vc-warn);
+
+        /* Solid console surfaces (glassmorphism retired). */
+        --zkpm-glass-bg: var(--vc-surface);
+        --zkpm-glass-bg-strong: var(--vc-surface-2);
+        --zkpm-glass-border: var(--vc-border);
+        --zkpm-glass-edge: var(--vc-border);
+        --zkpm-glass-edge-strong: var(--vc-accent);
+        --zkpm-glass-glow: 0 0 0 1px var(--vc-accent-soft), 0 6px 22px -8px rgba(0, 0, 0, 0.5);
+        --zkpm-glass-blur: 0px;
+        --zkpm-radius: 0.875rem;
+        --zkpm-radius-lg: 0.875rem;
+        --zkpm-shadow: var(--vc-shadow);
+        --zkpm-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.24);
+    }
+
+    /* Tailwind class-based dark mirrors data-theme=dark so the `dark:`
+       utilities resolve (Tailwind v3 uses `.dark` class). Keeping both in
+       sync is handled by the theme bootstrap + theme toggle. */
+    .dark {
+        color-scheme: dark;
+    }
+    [data-theme="light"] {
+        color-scheme: light;
+    }
+
+    [x-cloak] { display: none !important; }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--zkpm-bg);
+        color: var(--zkpm-text-primary);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Crisp Arabic typography for the full RTL experience */
+    [dir="rtl"] {
+        font-family: 'Cairo', 'Tajawal', 'IBM Plex Sans Arabic', 'Inter', sans-serif;
+        letter-spacing: 0 !important;
+    }
+
+    ::selection {
+        background-color: var(--zkpm-accent-glow);
+        color: var(--zkpm-text-primary);
+    }
+
+    *:focus-visible {
+        outline: 2px solid var(--zkpm-accent);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+
+    /* Consistent native select / checkbox accent */
+    select,
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="range"] {
+        accent-color: var(--zkpm-accent);
+    }
+
+    /* Prevent iOS Safari from auto-zooming into fields on focus
+       (fonts below 16px trigger the zoom). Mobile-first 16px inputs,
+       desktop keeps its compact sizing. */
+    @media (max-width: 767px) {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="search"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="url"],
+        textarea,
+        select {
+            font-size: 16px !important;
+        }
+    }
+}
+
+@layer components {
+
+    .zkpm-page-header {
+        @apply font-bold text-2xl leading-tight tracking-tight;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        color: var(--vc-text);
+    }
+
+    .zkpm-page-subtitle {
+        @apply text-xs mt-0.5;
+        color: var(--vc-text-dim);
+    }
+
+    /* Large personalized dashboard greeting (Space Grotesk display). */
+    .zkpm-welcome-title {
+        @apply font-bold leading-tight tracking-tight;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        color: var(--vc-text);
+        font-size: clamp(1.5rem, 3vw, 2.25rem);
+    }
+
+    .zkpm-stat-label {
+        @apply text-[10px] font-bold uppercase tracking-wider;
+        font-family: 'JetBrains Mono', 'Inter', monospace;
+        color: var(--vc-text-dim);
+    }
+
+    .zkpm-stat-value {
+        @apply mt-0.5 text-2xl font-black rtl-digits;
+        font-family: 'JetBrains Mono', 'Inter', monospace;
+        color: var(--vc-text);
+    }
+
+    .zkpm-card {
+        @apply glass-card p-6;
+    }
+
+    .zkpm-card-heading {
+        @apply flex items-center justify-between border-b pb-4 mb-4;
+        border-color: var(--vc-border);
+    }
+
+    /* Primary/secondary/danger buttons — solid console fills. */
+    .zkpm-btn-primary {
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        background: var(--vc-accent);
+        border-color: transparent;
+        color: #0f1720;
+        box-shadow: 0 4px 14px -6px var(--vc-accent);
+    }
+
+    .zkpm-btn-primary:hover {
+        filter: brightness(1.07);
+        transform: translateY(-1px);
+    }
+
+    .zkpm-btn-secondary {
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-semibold transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50;
+        background: transparent;
+        border-color: var(--vc-border);
+        color: var(--vc-text-dim);
+        box-shadow: var(--vc-shadow-sm);
+    }
+
+    .zkpm-btn-secondary:hover {
+        background: var(--vc-surface-2);
+        border-color: var(--vc-border);
+        color: var(--vc-text);
+        transform: translateY(-1px);
+    }
+
+    .zkpm-btn-danger {
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        background: color-mix(in srgb, var(--vc-danger) 12%, transparent);
+        border-color: color-mix(in srgb, var(--vc-danger) 45%, transparent);
+        color: var(--vc-danger);
+    }
+
+    .zkpm-btn-danger:hover {
+        background: color-mix(in srgb, var(--vc-danger) 20%, transparent);
+        transform: translateY(-1px);
+    }
+
+    .zkpm-input {
+        @apply w-full rounded-[10px] border px-3 py-2.5 text-sm transition duration-200 ease-in-out focus:outline-none focus:ring-4 disabled:opacity-60;
+        background: var(--vc-surface);
+        border-color: var(--vc-border);
+        color: var(--vc-text);
+        box-shadow: var(--vc-shadow-sm);
+    }
+
+    .zkpm-input::placeholder {
+        color: var(--vc-text-dim);
+    }
+
+    .zkpm-input:hover {
+        border-color: var(--vc-border-hover);
+    }
+
+    .zkpm-input:focus {
+        border-color: var(--vc-accent);
+        box-shadow: 0 0 0 3px var(--vc-accent-soft);
+    }
+
+    .zkpm-label {
+        @apply block text-xs font-semibold;
+        color: var(--vc-text-dim);
+    }
+
+    .zkpm-security-banner {
+        @apply flex items-start gap-3 rounded-xl border p-4 text-xs;
+        background: var(--vc-accent-soft);
+        border-color: color-mix(in srgb, var(--vc-accent) 30%, transparent);
+        color: var(--vc-text);
+    }
+
+    .zkpm-warning-banner {
+        @apply flex items-start gap-3 rounded-xl border p-4 text-xs;
+        background: var(--vc-warn-soft);
+        border-color: color-mix(in srgb, var(--vc-warn) 35%, transparent);
+        color: var(--vc-text);
+    }
+
+    .zkpm-success-banner {
+        @apply flex items-start gap-3 rounded-xl border p-4 text-xs;
+        background: var(--vc-accent-soft);
+        border-color: color-mix(in srgb, var(--vc-accent) 30%, transparent);
+        color: var(--vc-text);
+    }
+
+    .zkpm-table {
+        @apply w-full text-start text-xs;
+    }
+
+    .zkpm-table thead {
+        @apply border-b font-semibold uppercase tracking-wider;
+        background: var(--vc-surface-2);
+        border-color: var(--vc-border);
+        color: var(--vc-text-dim);
+    }
+
+    .zkpm-table th {
+        @apply py-3 px-4;
+    }
+
+    .zkpm-table tbody {
+        @apply divide-y font-medium;
+        --tw-divide-opacity: 1;
+        border-color: var(--vc-border);
+    }
+
+    .zkpm-table tbody > tr + tr {
+        border-top: 1px solid var(--vc-border);
+    }
+
+    .zkpm-table td {
+        @apply py-3.5 px-4 text-[length:theme(fontSize.xs)];
+        color: var(--vc-text-dim);
+    }
+
+    .zkpm-table tbody tr {
+        @apply transition duration-150;
+        background: var(--vc-surface);
+    }
+
+    .zkpm-table tbody tr:hover {
+        background: var(--vc-surface-2);
+    }
+
+    /* ── Password entropy / strength bar (visual security cue) ── */
+    .zkpm-strength-bar {
+        @apply h-1.5 w-full overflow-hidden rounded-full;
+        background: var(--vc-border);
+    }
+
+    .zkpm-strength-bar-fill {
+        @apply h-full rounded-full transition-all duration-300 ease-out;
+        background: var(--vc-accent);
+    }
+
+    /* ── Vault stat tile used on dashboards / settings hub ── */
+    .zkpm-stat-card {
+        @apply glass-card p-4 flex items-start gap-3 transition duration-200 ease-in-out hover:-translate-y-0.5;
+    }
+
+    .zkpm-stat-icon {
+        border: 1px solid var(--vc-border);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONSOLE SURFACE SYSTEM — solid elevated panels.
+   Kept OUTSIDE any @layer so Tailwind v3 never tree-shakes them away.
+   The glassmorphism system from the previous theme has been repurposed as
+   the console's solid framing: fills resolve to --vc-surface / --vc-surface-2,
+   blur is 0, and separation comes from a 1px --vc-border outline plus a
+   soft drop shadow. All geometry uses logical properties so it mirrors
+   perfectly between Arabic (RTL) and English (LTR).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Base console surface. */
+.glass {
+    background: var(--zkpm-glass-bg);
+    border: 1px solid var(--zkpm-glass-edge);
+    box-shadow: var(--zkpm-shadow);
+    border-radius: var(--zkpm-radius);
+}
+
+/* Large container (sidebar, header, dropdown). */
+.glass-panel {
+    background: var(--zkpm-glass-bg);
+    border: 1px solid var(--zkpm-glass-edge);
+    border-radius: var(--zkpm-radius-lg);
+    box-shadow: var(--zkpm-shadow);
+}
+
+/* Console floating card: solid surface, hairline border, soft shadow. */
+.glass-card {
+    position: relative;
+    background: var(--zkpm-glass-bg);
+    border: 1px solid var(--zkpm-glass-edge);
+    border-radius: var(--zkpm-radius-lg);
+    box-shadow: var(--zkpm-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--zkpm-glass-edge-strong);
+    box-shadow: var(--zkpm-shadow), 0 24px 48px -28px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Console BUTTON (active menu items, Light/Dark toggle, LTR/RTL
+      switch, quick actions, chips). Solid surface + hairline border. ── */
+.glass-btn {
+    background: var(--zkpm-glass-bg);
+    border: 1px solid var(--zkpm-glass-edge);
+    border-radius: 0.75rem;
+    box-shadow: var(--zkpm-glass-glow), var(--zkpm-shadow-sm);
+    transition: all 0.2s ease-in-out;
+}
+
+.glass-btn:hover {
+    border-color: var(--zkpm-glass-edge-strong);
+    background: var(--zkpm-glass-bg-strong);
+    transform: translateY(-1px);
+}
+
+.glass-btn:active {
+    transform: translateY(0) scale(0.975);
+    box-shadow: var(--zkpm-glass-glow), var(--zkpm-shadow-sm);
+}
+
+/* ── Active / selected state (current nav item, pressed toggle): solid
+      elevated surface with a 1px accent outline. ── */
+.glass-active {
+    background: var(--zkpm-glass-bg-strong);
+    border: 1px solid var(--zkpm-glass-edge-strong);
+    box-shadow: var(--zkpm-glass-glow), var(--zkpm-shadow-sm);
+}
+
+/* Legacy alias: `.glass-control` behaves exactly like `.glass-btn`. */
+.glass-control {
+    background: var(--zkpm-glass-bg);
+    border: 1px solid var(--zkpm-glass-edge);
+    border-radius: 0.75rem;
+    box-shadow: var(--zkpm-glass-glow), var(--zkpm-shadow-sm);
+    transition: all 0.2s ease-in-out;
+}
+
+.glass-control:hover {
+    border-color: var(--zkpm-glass-edge-strong);
+    background: var(--zkpm-glass-bg-strong);
+    transform: translateY(-1px);
+}
+
+.glass-control:active {
+    transform: translateY(0) scale(0.975);
+    box-shadow: var(--zkpm-glass-glow), var(--zkpm-shadow-sm);
+}
+
+/* ── Vault Console markup helpers ─────────────────────────────────────────
+   Composed from the theme tokens so the signature elements (cipher strip,
+   theme pill, auto-lock widget) share a single visual voice with the rest
+   of the console. ── */
+
+/* Technical/data eyebrow label (features, timers, key ids). */
+.vc-eyebrow {
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vc-text-dim);
+}
+
+/* Mono surfaced readout (digest, hashes, counts). */
+.vc-mono {
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    color: var(--vc-text);
+    letter-spacing: 0;
+}
+
+/* Small glowing live marker (used by cipher strip + widgets). */
+.vc-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: var(--vc-accent);
+    box-shadow: 0 0 0 3px var(--vc-accent-soft), 0 0 12px 2px var(--vc-accent);
+}
+
+/* ── Live cipher strip (signature): full-width bar under the topbar where
+      plaintext → ciphertext pairs cycle in real time. ── */
+.cipher-strip {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, var(--vc-accent-soft), transparent 65%);
+    border-block: 1px solid var(--vc-border);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, transparent 96%);
+            mask-image: linear-gradient(90deg, #000 0%, transparent 96%);
+}
+
+.cipher-strip-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2rem;
+    padding-inline: 1rem;
+}
+
+/* ── Theme pill toggle ── */
+.theme-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem;
+    border-radius: 9999px;
+    background: var(--vc-surface-2);
+    border: 1px solid var(--vc-border);
+}
+
+.theme-pill-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    width: 2.4rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 9999px;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--vc-text-dim);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.theme-pill-option[aria-pressed="true"] {
+    background: var(--vc-accent);
+    color: #0f1720;
+    box-shadow: var(--vc-shadow-sm);
+}
+
+/* ── Auto-lock countdown widget ── */
+.auto-lock-widget {
+    border: 1px solid var(--vc-border);
+    background: var(--vc-surface);
+    border-radius: 0.75rem;
+    padding: 0.6rem 0.7rem;
+}
+
+.auto-lock-track {
+    height: 4px;
+    border-radius: 9999px;
+    background: var(--vc-border);
+    overflow: hidden;
+}
+
+.auto-lock-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--vc-accent);
+    box-shadow: 0 0 8px var(--vc-accent);
+    transition: width 1s linear;
+}
+
+/* Locked/idle state for the auto-lock widget (warning amber — never red
+   for a non-destructive state). */
+.vc-locked-state {
+    color: var(--vc-warn);
+    visibility: hidden;
+}
+.vc-locked-state:not(:empty) {
+    visibility: visible;
+}
+
+@layer utilities {
+    .scrollbar-cyber {
+        scrollbar-width: thin;
+        scrollbar-color: var(--zkpm-border-hover) transparent;
+    }
+
+    .scrollbar-cyber::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    .scrollbar-cyber::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-cyber::-webkit-scrollbar-thumb {
+        background-color: var(--zkpm-border-hover);
+        border-radius: 9999px;
+    }
+
+    .scrollbar-cyber::-webkit-scrollbar-thumb:hover {
+        background-color: var(--zkpm-text-muted);
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .animate-slide-up {
+        animation: slideUp 0.4s ease-out;
+    }
+
+    .animate-slide-down {
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .animate-scale-in {
+        animation: scaleIn 0.2s ease-out;
+    }
+
+    /* Clean, solid page background — no grids, patterns, or textures. */
+    .cyber-bg {
+        background-color: var(--zkpm-bg);
+    }
+
+    .theme-transition,
+    .theme-transition * {
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .shimmer {
+        background: linear-gradient(
+            90deg,
+            var(--zkpm-border) 25%,
+            var(--zkpm-border-hover) 50%,
+            var(--zkpm-border) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 2s linear infinite;
+    }
+
+    /* Toast auto-dismiss progress indicator */
+    .toast-progress {
+        animation-name: toastProgress;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes toastProgress {
+        from { width: 100%; }
+        to { width: 0%; }
+    }
+
+    .glow-accent {
+        box-shadow: 0 0 20px var(--zkpm-accent-glow);
+    }
+
+    .glow-accent-lg {
+        box-shadow: 0 0 40px var(--zkpm-accent-glow);
+    }
+
+    /* Gentle vertical float for hero elements and chips */
+    .animate-float {
+        animation: floaty 5s ease-in-out infinite;
+    }
+
+    @keyframes floaty {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-9px); }
+    }
+
+    /* Blinking cursor block */
+    .animate-blink {
+        animation: blink 1.05s step-end infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+
+    /* Animated sheen across the hero headline (kept subtle + theme-aware) */
+    .text-gradient-sheen {
+        background: linear-gradient(100deg, #1d1d1f 20%, #0071e3 50%, #1d1d1f 80%);
+        background-size: 220% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: sheen 7s ease-in-out infinite;
+    }
+
+    .dark .text-gradient-sheen {
+        background: linear-gradient(100deg, #ffffff 20%, #0a84ff 50%, #ffffff 80%);
+        background-size: 220% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: sheen 7s ease-in-out infinite;
+    }
+
+    @keyframes sheen {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    /* Scroll-reveal state machine (enabled only when JS is available) */
+    html.js .reveal {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.65s ease-out, transform 0.65s ease-out;
+    }
+
+    html.js .reveal.revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html.js .reveal {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+    }
+
+    .nav-link-active {
+        background: var(--vc-accent-soft);
+        color: var(--vc-accent);
+        font-weight: 600;
+        box-shadow: none;
+    }
+
+    .nav-link-inactive {
+        color: var(--vc-text-dim);
+        transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-link-inactive:hover {
+        color: var(--vc-text);
+        background: var(--vc-surface-2);
+    }
+
+    /* RTL-safe mono digits: keep Latin numerals visually stable in Arabic text */
+    .rtl-digits {
+        letter-spacing: 0;
+    }
+
+    /* Safe-area: hide scrollbar edges for long tables */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }

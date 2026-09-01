@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="zkpmTile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16202c"/>
+      <stop offset="1" stop-color="#0b1118"/>
+    </linearGradient>
+    <radialGradient id="zkpmGlow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#3ecf8e" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#3ecf8e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="zkpmShield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7df4ba"/>
+      <stop offset="0.5" stop-color="#3ecf8e"/>
+      <stop offset="1" stop-color="#1f9d6b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded tile -->
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmTile)"/>
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmGlow)"/>
+
+  <!-- Inner border -->
+  <rect x="24" y="24" width="464" height="464" rx="110" fill="none" stroke="#3ecf8e" stroke-opacity="0.18" stroke-width="5"/>
+
+  <!-- Faceted gem shield (Vault Console signature) -->
+  <path d="M256 124 L360 164 V244 L256 384 L152 244 V164 Z"
+        fill="url(#zkpmShield)" stroke="url(#zkpmShield)" stroke-width="5" stroke-linejoin="round"/>
+
+  <!-- Shield facets -->
+  <path d="M210 252 L302 252" stroke="#0b1118" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+  <path d="M256 124 L256 200" stroke="#0b1118" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Exposure / badge dot -->
+  <circle cx="348" cy="188" r="16" fill="#0b1118"/>
+  <circle cx="348" cy="188" r="8" fill="#7df4ba"/>
+</svg>
