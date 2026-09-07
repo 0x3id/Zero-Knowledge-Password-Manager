@@ -1,10 +1,10 @@
 {{-- Client-side auto-lock modal overlay (un-dismissible while vault is locked) --}}
 <div id="lock-modal"
-     class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/85 backdrop-blur-md px-4 select-none"
+     class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/85 backdrop-blur-md px-4 [padding-top:max(env(safe-area-inset-top),1rem)] [padding-bottom:max(env(safe-area-inset-bottom),1.5rem)] select-none"
      role="dialog"
      aria-modal="true"
      aria-labelledby="lock-modal-title">
-    <div class="w-full max-w-md m-auto glass-card rounded-2xl p-8 py-6 shadow-2xl space-y-5 text-center animate-scale-in">
+    <div class="w-full max-w-md m-auto glass-card rounded-2xl p-6 sm:p-8 py-6 shadow-2xl space-y-5 text-center animate-scale-in">
         <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-glow">
             <x-icon-lock class="w-7 h-7" />
         </div>

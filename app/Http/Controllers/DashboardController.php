@@ -49,16 +49,20 @@ class DashboardController extends Controller
             ->latest('created_at')
             ->first();
 
-        $vaultLogs = $user->vaultItems()
+        // All audit activity inside the rolling week, pulled once and
+        // bucketed for the chart (password generation) and the counts
+        // (generated_week / audit_week) — one query instead of two.
+        $weekLogs = $user->auditLogs()
             ->where('created_at', '>=', $weekStart)
-            ->pluck('created_at');
-        $generatedLogs = $user->auditLogs()
-            ->where('action_type', 'password_generated')
+            ->get(['action_type', 'created_at']);
+        $generatedLogs = $weekLogs->where('action_type', 'password_generated');
+
+        $vaultLogs = $user->vaultItems()
             ->where('created_at', '>=', $weekStart)
             ->pluck('created_at');
 
         $itemsByDay = $vaultLogs->countBy(fn (Carbon $at) => $at->format('Y-m-d'));
-        $generatedByDay = $generatedLogs->countBy(fn (Carbon $at) => $at->format('Y-m-d'));
+        $generatedByDay = $generatedLogs->pluck('created_at')->countBy(fn (Carbon $at) => $at->format('Y-m-d'));
 
         $chart = collect(range(6, 0))->map(function (int $offset) use ($itemsByDay, $generatedByDay) {
             $day = Carbon::today()->subDays($offset);
@@ -72,6 +76,10 @@ class DashboardController extends Controller
         });
         $chartMax = max(1, $chart->max(fn (array $day) => $day['items'] + $day['generated']));
 
+        // Derived once here: the passkey count (used for the dashboard card)
+        // also tells us whether any passkey exists for the 2FA badge.
+        $passkeyCount = $user->webauthnCredentials()->count();
+
         return view('dashboard', [
             'displayName' => $displayName,
             'lastLogin' => $lastLogin,
@@ -80,10 +88,10 @@ class DashboardController extends Controller
                 'vault_items' => $user->vaultItems()->count(),
                 'categories' => $user->categories()->count(),
                 'generated_total' => $user->auditLogs()->where('action_type', 'password_generated')->count(),
-                'generated_week' => (int) $generatedLogs->count(),
-                'audit_week' => $user->auditLogs()->where('created_at', '>=', $weekStart)->count(),
+                'generated_week' => $generatedLogs->count(),
+                'audit_week' => $weekLogs->count(),
                 'sessions' => DB::table('sessions')->where('user_id', $user->id)->count(),
-                'passkeys' => $user->webauthnCredentials()->count(),
+                'passkeys' => $passkeyCount,
                 // The server stores only AES-256-GCM ciphertext and can never
                 // inspect password contents, so a server-side breach/strength
                 // score is not computable. Shown as 0 (nothing flagged); any
@@ -92,7 +100,7 @@ class DashboardController extends Controller
             ],
             'twoFactor' => [
                 'totp' => (bool) $user->is_totp_complete,
-                'webauthn' => $user->webauthnCredentials()->exists(),
+                'webauthn' => $passkeyCount > 0,
             ],
             'chart' => $chart,
             'chartMax' => $chartMax,

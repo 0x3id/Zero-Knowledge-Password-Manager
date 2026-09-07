@@ -18,14 +18,21 @@
 
         <title>{{ config('app.name', 'ZeroKnowledgePM') }} — {{ __('Zero-Knowledge Vault') }}</title>
 
-        {{-- No-flicker bootstrap: light by default, cyber black only when chosen --}}
+        {{-- No-flicker theme bootstrap: synchronous, BEFORE any <link>/CSS.
+            Dark is the product default. Preference: localStorage, else dark.
+            Sets data-theme + .dark on <html> so the landing's dark:
+            utilities resolve pre-paint. --}}
         <script nonce="{{ $cspNonce ?? '' }}">
             (function () {
-                document.documentElement.classList.add('js');
-                if (localStorage.getItem('zkpm_theme') === 'dark') {
-                    document.documentElement.classList.add('dark');
-                    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+                var root = document.documentElement;
+                root.classList.add('js');
+                var theme = localStorage.getItem('zkpm_theme');
+                if (theme !== 'dark' && theme !== 'light') {
+                    theme = 'dark';
                 }
+                root.setAttribute('data-theme', theme);
+                root.classList.toggle('dark', theme === 'dark');
+                document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#000000' : '#fcfcfa');
             })();
         </script>
 

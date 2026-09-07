@@ -58,55 +58,12 @@
 @layer base {
 
     /* ── Vault Console Design Tokens ────────────────
-       Light mode (default at runtime unless the user chose dark; the app
-       favours dark so the no-flicker bootstrap defaults to dark). Soft
-       "paper" surfaces with a green console accent. */
+       `:root` (no attribute yet) resolves to the DARK palette so the bare
+       CSS fallback equals the product default: if the no-flicker bootstrap
+       is ever blocked/missing, the page degrades to dark instead of
+       flashing light. `[data-theme="dark"]` re-declares dark explicitly,
+       and `[data-theme="light"]` overrides to light. */
     :root,
-    [data-theme="light"] {
-        --vc-bg: #f6f8fa;
-        --vc-surface: #ffffff;
-        --vc-surface-2: #eef2f5;
-        --vc-border: #dce3ea;
-        --vc-text: #16212c;
-        --vc-text-dim: #5a6b7b;
-        --vc-accent: #1f9d6b;
-        --vc-accent-soft: rgba(31, 157, 107, 0.10);
-        --vc-warn: #b9791f;
-        --vc-warn-soft: rgba(185, 121, 31, 0.10);
-        --vc-danger: #c4453b;
-        --vc-shadow: 0 8px 24px rgba(20, 30, 40, 0.08);
-
-        /* Legacy --zkpm-* aliases → Vault Console palette (light). */
-        --zkpm-bg: var(--vc-bg);
-        --zkpm-surface: var(--vc-surface);
-        --zkpm-surface-alt: var(--vc-surface-2);
-        --zkpm-border: var(--vc-border);
-        --zkpm-border-hover: color-mix(in srgb, var(--vc-border) 72%, var(--vc-text) 28%);
-        --zkpm-text-primary: var(--vc-text);
-        --zkpm-text-secondary: var(--vc-text-dim);
-        --zkpm-text-muted: color-mix(in srgb, var(--vc-text-dim) 82%, var(--vc-text) 18%);
-        --zkpm-accent: var(--vc-accent);
-        --zkpm-accent-hover: color-mix(in srgb, var(--vc-accent) 88%, #ffffff 12%);
-        --zkpm-accent-glow: var(--vc-accent-soft);
-        --zkpm-danger: var(--vc-danger);
-        --zkpm-success: var(--vc-accent);
-        --zkpm-warning: var(--vc-warn);
-
-        /* Solid console surfaces (glassmorphism retired). */
-        --zkpm-glass-bg: var(--vc-surface);
-        --zkpm-glass-bg-strong: var(--vc-surface-2);
-        --zkpm-glass-border: var(--vc-border);
-        --zkpm-glass-edge: var(--vc-border);
-        --zkpm-glass-edge-strong: var(--vc-accent);
-        --zkpm-glass-glow: 0 0 0 1px var(--vc-accent-soft), 0 4px 18px -6px rgba(20, 30, 40, 0.18);
-        --zkpm-glass-blur: 0px;
-        --zkpm-radius: 0.875rem;
-        --zkpm-radius-lg: 0.875rem;
-        --zkpm-shadow: var(--vc-shadow);
-        --zkpm-shadow-sm: 0 2px 10px rgba(20, 30, 40, 0.06);
-    }
-
-    /* ── Dark Mode Override — deep steel-navy console ── */
     [data-theme="dark"] {
         --vc-bg: #0f1720;
         --vc-surface: #16212c;
@@ -151,12 +108,64 @@
         --zkpm-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.24);
     }
 
+    /* ── Light Mode Override — soft "paper" surfaces ── */
+    [data-theme="light"] {
+        --vc-bg: #f6f8fa;
+        --vc-surface: #ffffff;
+        --vc-surface-2: #eef2f5;
+        --vc-border: #dce3ea;
+        --vc-text: #16212c;
+        --vc-text-dim: #5a6b7b;
+        --vc-accent: #1f9d6b;
+        --vc-accent-soft: rgba(31, 157, 107, 0.10);
+        --vc-warn: #b9791f;
+        --vc-warn-soft: rgba(185, 121, 31, 0.10);
+        --vc-danger: #c4453b;
+        --vc-shadow: 0 8px 24px rgba(20, 30, 40, 0.08);
+
+        /* Legacy --zkpm-* aliases → Vault Console palette (light). */
+        --zkpm-bg: var(--vc-bg);
+        --zkpm-surface: var(--vc-surface);
+        --zkpm-surface-alt: var(--vc-surface-2);
+        --zkpm-border: var(--vc-border);
+        --zkpm-border-hover: color-mix(in srgb, var(--vc-border) 72%, var(--vc-text) 28%);
+        --zkpm-text-primary: var(--vc-text);
+        --zkpm-text-secondary: var(--vc-text-dim);
+        --zkpm-text-muted: color-mix(in srgb, var(--vc-text-dim) 82%, var(--vc-text) 18%);
+        --zkpm-accent: var(--vc-accent);
+        --zkpm-accent-hover: color-mix(in srgb, var(--vc-accent) 88%, #ffffff 12%);
+        --zkpm-accent-glow: var(--vc-accent-soft);
+        --zkpm-danger: var(--vc-danger);
+        --zkpm-success: var(--vc-accent);
+        --zkpm-warning: var(--vc-warn);
+
+        /* Solid console surfaces (glassmorphism retired). */
+        --zkpm-glass-bg: var(--vc-surface);
+        --zkpm-glass-bg-strong: var(--vc-surface-2);
+        --zkpm-glass-border: var(--vc-border);
+        --zkpm-glass-edge: var(--vc-border);
+        --zkpm-glass-edge-strong: var(--vc-accent);
+        --zkpm-glass-glow: 0 0 0 1px var(--vc-accent-soft), 0 4px 18px -6px rgba(20, 30, 40, 0.18);
+        --zkpm-glass-blur: 0px;
+        --zkpm-radius: 0.875rem;
+        --zkpm-radius-lg: 0.875rem;
+        --zkpm-shadow: var(--vc-shadow);
+        --zkpm-shadow-sm: 0 2px 10px rgba(20, 30, 40, 0.06);
+    }
+
     /* Tailwind class-based dark mirrors data-theme=dark so the `dark:`
        utilities resolve (Tailwind v3 uses `.dark` class). Keeping both in
        sync is handled by the theme bootstrap + theme toggle. */
     .dark {
         color-scheme: dark;
     }
+
+    /* Bare fallback matches the DARK product default (see token comment);
+       light only ever applies once `data-theme="light"` is set. */
+    :root {
+        color-scheme: dark;
+    }
+
     [data-theme="light"] {
         color-scheme: light;
     }
@@ -260,7 +269,7 @@
 
     /* Primary/secondary/danger buttons — solid console fills. */
     .zkpm-btn-primary {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-bold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
         background: var(--vc-accent);
         border-color: transparent;
         color: #0f1720;
@@ -273,7 +282,7 @@
     }
 
     .zkpm-btn-secondary {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-semibold transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-semibold transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50;
         background: transparent;
         border-color: var(--vc-border);
         color: var(--vc-text-dim);
@@ -288,7 +297,7 @@
     }
 
     .zkpm-btn-danger {
-        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-semibold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
         background: color-mix(in srgb, var(--vc-danger) 12%, transparent);
         border-color: color-mix(in srgb, var(--vc-danger) 45%, transparent);
         color: var(--vc-danger);
@@ -613,6 +622,128 @@
     visibility: visible;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINT SYSTEM (Vault Console)
+   ─────────────────────────────────────────────────────────────────────────
+   The app aligns with Tailwind's default breakpoints (already used across
+   every view) — they are the single source of truth and are NOT re-declared
+   ad-hoc per component:
+
+     Mobile            < 640px            (default / no `sm` prefix)
+     Large mobile      ≥ 640px  & < 768px (`sm:`)
+     Tablet            ≥ 768px  & < 1024px(`md:`)
+     Desktop rail      ≥ 1024px           (`lg:` — fixed sidebar appears)
+
+   Small-phone overrides (≤ 420px) and the mobile stacked-table cards are
+   handled with explicit max-width media queries below so the densest
+   screens stay clean without drifting into ad-hoc per-component widths.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Small-phone guard (≤ 420px) — tighten horizontal rhythm so long
+      labels, buttons and header clusters never overflow the viewport. ── */
+@media (max-width: 420px) {
+    .zkpm-page-header {
+        font-size: 1.35rem;
+    }
+
+    /* Form submit rows stack their primary action full-width below any
+       secondary link/label to guarantee a ≥ 44px tap area and no wrap. */
+    .zkpm-form-row {
+        @apply items-stretch;
+    }
+}
+
+/* ── Compact mobile theme pill ────────────────────────────────────────────
+   On phones the Dark/Light text labels are dropped, leaving the two icon
+   options only. This keeps the pill block within the topbar cluster so the
+   hamburger, logo, lock, user and swithchers never overflow at 375px. */
+@media (max-width: 639px) {
+    .theme-pill-option {
+        width: 2rem;
+        padding: 0.3rem 0.25rem;
+    }
+}
+
+/* ── Persistent auto-lock chip (mobile topbar) ────────────────────────────
+   A compact countdown readout shown on < lg so the auto-lock state stays
+   visible on phones without opening the drawer. Mirrors the sidebar widget
+   tokens (mono digits, live-dot, hairline border). */
+.mobile-autolock-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--vc-border);
+    background: var(--vc-surface);
+    border-radius: 9999px;
+}
+
+/* ── Audit-log table → stacked cards on mobile ────────────────────────────
+   Below `md` the tabular header is hidden and each row becomes a card whose
+   cells stack as labeled fields (via the `data-label` attribute rendered in
+   the Blade view). This eliminates the horizontal-scroll wrapper entirely. */
+@media (max-width: 767px) {
+    .zkpm-table thead {
+        display: none;
+    }
+
+    .zkpm-table tbody > tr {
+        display: block;
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--vc-border);
+        border-radius: 0.875rem;
+        background: var(--vc-surface);
+        padding: 0.75rem;
+        box-shadow: var(--zkpm-shadow-sm);
+    }
+
+    .zkpm-table td {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.5rem 0.25rem;
+        border-top: 1px solid var(--vc-border);
+        text-align: end;
+    }
+
+    .zkpm-table td:first-child {
+        border-top: 0;
+    }
+
+    /* Label column rendered from `data-label` */
+    .zkpm-table td::before {
+        content: attr(data-label);
+        flex: 0 0 40%;
+        text-align: start;
+        font-family: 'JetBrains Mono', 'Inter', monospace;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--vc-text-dim);
+        white-space: normal;
+    }
+}
+
+/* ── Touch targets & safe-area refinements ────────────────────────────────
+   Guarantee minimum 44px tap targets on interactive elements and respect
+   the iPhone home-indicator for fixed/persistent bars and full modals. */
+@media (max-width: 767px) {
+    /* Vault card action buttons (Reveal / Copy / Edit / Delete) */
+    .vault-card-action {
+        min-height: 44px;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+    }
+
+    /* Category-filter pills */
+    #category-filter-list button {
+        min-height: 44px;
+    }
+}
+
 @layer utilities {
     .scrollbar-cyber {
         scrollbar-width: thin;
@@ -658,9 +789,21 @@
         background-color: var(--zkpm-bg);
     }
 
-    .theme-transition,
-    .theme-transition * {
-        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    /* Theme switching uses the View Transitions API (a single browser
+       compositor cross-fade of the whole page) instead of per-element
+       transitions. The old `.theme-transition *` rule made every node
+       re-paint four properties at once, causing visible lag on dense
+       pages. With reduced-motion, the switch is instant. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.2s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation: none;
+        }
     }
 
     .shimmer {

@@ -60,16 +60,18 @@ function startCipherStrip() {
  * @returns {void}
  */
 function initAutoLockWidget() {
-    const widget = document.getElementById('auto-lock-widget');
-    if (!widget) return;
+    // The auto-lock state is rendered in two places that share a single
+    // countdown: the sidebar widget (sidebar-content) and the compact mobile
+    // chip in the topbar (navigation). Update every driven node so both stay
+    // in perfect sync as the timeout runs down.
+    const timeEls = document.querySelectorAll('[data-autolock-time]');
+    if (timeEls.length === 0) return;
 
-    const timeEl = widget.querySelector('[data-autolock-time]');
-    const fillEl = widget.querySelector('[data-autolock-fill]');
-    const stateEl = widget.querySelector('[data-autolock-state]');
-    const icoEl = widget.querySelector('[data-autolock-icon]');
+    const fillEl = document.querySelector('[data-autolock-fill]');
+    const stateEl = document.querySelector('[data-autolock-state]');
+    const icoEl = document.querySelector('[data-autolock-icon]');
     const lockIco = icoEl?.querySelector('[data-lock-ico]');
     const unlockIco = icoEl?.querySelector('[data-unlock-ico]');
-    if (!timeEl || !fillEl) return;
 
     const lockedLabel = stateEl?.dataset.lockedLabel || 'Locked';
 
@@ -85,22 +87,26 @@ function initAutoLockWidget() {
     let locked = false;
 
     const render = () => {
-        if (locked) {
-            fillEl.style.width = '0%';
-            timeEl.textContent = '—';
-            return;
+        const text = (() => {
+            if (locked) return '—';
+            const remaining = Math.max(0, endAt - Date.now());
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000)
+                .toString()
+                .padStart(2, '0');
+            return `${minutes}:${seconds}`;
+        })();
+
+        timeEls.forEach((el) => { el.textContent = text; });
+
+        if (fillEl) {
+            if (locked) {
+                fillEl.style.width = '0%';
+            } else {
+                const remaining = Math.max(0, endAt - Date.now());
+                fillEl.style.width = `${Math.round((remaining / AUTO_LOCK_TIMEOUT_MS) * 100)}%`;
+            }
         }
-
-        const remaining = Math.max(0, endAt - Date.now());
-        const ratio = remaining / AUTO_LOCK_TIMEOUT_MS;
-
-        const minutes = Math.floor(remaining / 60000);
-        const seconds = Math.floor((remaining % 60000) / 1000)
-            .toString()
-            .padStart(2, '0');
-
-        timeEl.textContent = `${minutes}:${seconds}`;
-        fillEl.style.width = `${Math.round(ratio * 100)}%`;
     };
 
     const reset = () => {

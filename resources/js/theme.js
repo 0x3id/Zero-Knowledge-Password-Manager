@@ -22,12 +22,17 @@ export const LANG_STORAGE_KEY = 'zkpm_lang';
 const SUPPORTED_LANGS = ['en', 'ar'];
 
 /**
- * Read the persisted theme, defaulting to dark (the Vault Console default).
+ * Resolve the active theme: persisted preference if set, otherwise the
+ * product default (dark). Matches the head bootstrap fallback so the
+ * toggle shows the correct state on the very first visit before the user
+ * has chosen anything. Dark always wins for unsaved visitors — light only
+ * ever comes from an explicit stored choice or an in-app toggle.
  *
  * @returns {string} 'dark' or 'light'.
  */
 export function currentTheme() {
-    return localStorage.getItem(THEME_STORAGE_KEY) === 'light' ? 'light' : 'dark';
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    return saved === 'light' ? 'light' : 'dark';
 }
 
 /**
@@ -46,13 +51,44 @@ export function applyTheme(theme) {
 }
 
 /**
+ * Switch themes with a single compositor-assisted cross-fade.
+ *
+ * Wraps the DOM mutation in the View Transitions API when the browser
+ * supports it and the user has not opted into reduced motion; otherwise
+ * it applies instantly. This avoids the per-element color transitions
+ * that previously re-painted the whole page at once and caused lag on
+ * dense screens (dashboard, vault, audit logs).
+ *
+ * @param {string} theme - 'dark' or 'light'.
+ * @returns {void}
+ */
+export function setTheme(theme) {
+    if (theme !== 'dark' && theme !== 'light' || theme === currentTheme()) {
+        return;
+    }
+
+    const apply = () => {
+        applyTheme(theme);
+        window.dispatchEvent(new CustomEvent('zkpm:theme-changed', { detail: { theme } }));
+    };
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (typeof document.startViewTransition === 'function' && !prefersReducedMotion) {
+        document.startViewTransition(apply);
+    } else {
+        apply();
+    }
+}
+
+/**
  * Toggle between light and dark themes.
  *
  * @returns {string} The newly applied theme.
  */
 export function toggleTheme() {
     const next = currentTheme() === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
+    setTheme(next);
     return next;
 }
 

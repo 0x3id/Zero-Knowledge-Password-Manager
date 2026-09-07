@@ -4,11 +4,16 @@ import { initAuth } from './auth.js';
 import { initConsole } from './console.js';
 import { initLanding } from './landing.js';
 import { initLock } from './lock.js';
-import { initThemeSwitchers, registerToastStore } from './theme.js';
+import { initThemeSwitchers, registerToastStore, setTheme } from './theme.js';
 import { registerSidebarStore } from './sidebar.js';
 import { initWebauthnManager } from './webauthn-manager.js';
 
 window.Alpine = Alpine;
+
+// Expose the theme toggle to the Alpine theme-switcher component: it
+// routes through `setTheme()` so switching uses a single compositor
+// cross-fade (View Transitions API) instead of per-element transitions.
+window.zkpmSetTheme = setTheme;
 
 // Global plugins & stores must exist before Alpine boots the DOM.
 Alpine.plugin(collapse);

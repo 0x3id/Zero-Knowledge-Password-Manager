@@ -26,7 +26,7 @@
     <div id="totp-secret-panel" class="mt-4 hidden space-y-4">
         <div class="relative flex justify-center rounded-xl bg-slate-100 dark:bg-slate-800/60 p-4 border border-slate-200 dark:border-slate-700">
             <div class="pointer-events-none absolute inset-1.5 rounded-lg border-2 border-dashed border-blue-300 dark:border-blue-700/50"></div>
-            <canvas id="totp-qr" width="220" height="220" class="relative rounded-lg bg-white"></canvas>
+            <canvas id="totp-qr" width="220" height="220" class="relative max-w-full rounded-lg bg-white h-auto"></canvas>
         </div>
 
         <div class="rounded-xl bg-slate-100 dark:bg-slate-800/60 p-3 border border-slate-200 dark:border-slate-700">

@@ -54,35 +54,37 @@
                         <tbody>
                             @forelse ($logs as $log)
                                 <tr>
-                                    <td class="whitespace-nowrap">
-                                        @php
-                                            $badges = [
-                                                'login' => ['type' => 'success', 'label' => __('User Login')],
-                                                'logout' => ['type' => 'info', 'label' => __('User Logout')],
-                                                'vault_item_created' => ['type' => 'encrypted', 'label' => __('Item Created')],
-                                                'vault_item_updated' => ['type' => 'info', 'label' => __('Item Updated')],
-                                                'vault_item_deleted' => ['type' => 'danger', 'label' => __('Item Deleted')],
-                                                'password_changed' => ['type' => 'warning', 'label' => __('Password Reset')],
-                                                'password_generated' => ['type' => 'info', 'label' => __('Password Generated')],
-                                                'webauthn_registered' => ['type' => 'success', 'label' => __('Passkey Added')],
-                                                'webauthn_removed' => ['type' => 'warning', 'label' => __('Passkey Removed')],
-                                                '2fa_totp_enabled' => ['type' => 'success', 'label' => __('TOTP 2FA Enabled')],
-                                                'session_revoked' => ['type' => 'warning', 'label' => __('Session Revoked')],
-                                                'recovery_used' => ['type' => 'danger', 'label' => __('Recovery Used')],
-                                            ];
-                                            $badge = $badges[$log->action_type] ?? ['type' => 'info', 'label' => $log->action_type];
-                                        @endphp
+                                    @php
+                                        $badges = [
+                                            'login' => ['type' => 'success', 'label' => __('User Login')],
+                                            'logout' => ['type' => 'info', 'label' => __('User Logout')],
+                                            'vault_item_created' => ['type' => 'encrypted', 'label' => __('Item Created')],
+                                            'vault_item_updated' => ['type' => 'info', 'label' => __('Item Updated')],
+                                            'vault_item_deleted' => ['type' => 'danger', 'label' => __('Item Deleted')],
+                                            'password_changed' => ['type' => 'warning', 'label' => __('Password Reset')],
+                                            'password_generated' => ['type' => 'info', 'label' => __('Password Generated')],
+                                            'webauthn_registered' => ['type' => 'success', 'label' => __('Passkey Added')],
+                                            'webauthn_removed' => ['type' => 'warning', 'label' => __('Passkey Removed')],
+                                            '2fa_totp_enabled' => ['type' => 'success', 'label' => __('TOTP 2FA Enabled')],
+                                            'session_revoked' => ['type' => 'warning', 'label' => __('Session Revoked')],
+                                            'recovery_used' => ['type' => 'danger', 'label' => __('Recovery Used')],
+                                        ];
+                                        $badge = $badges[$log->action_type] ?? ['type' => 'info', 'label' => $log->action_type];
+                                    @endphp
+                                    <td data-label="{{ __('Event Type') }}" class="whitespace-nowrap">
                                         <x-security-badge :type="$badge['type']" :label="$badge['label']" />
                                     </td>
-                                    <td class="text-slate-700 dark:text-slate-300 whitespace-nowrap">
+                                    <td data-label="{{ __('Device & Browser') }}" class="text-slate-700 dark:text-slate-300">
                                         {{ $log->device_info ?? __('Unknown Device') }}
                                     </td>
-                                    <td class="font-mono text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                                        {{ $log->ip_address ?? '-' }}
+                                    <td data-label="{{ __('IP Address') }}" class="font-mono text-slate-600 dark:text-slate-400">
+                                        <span class="break-all">{{ $log->ip_address ?? '-' }}</span>
                                     </td>
-                                    <td class="text-slate-500 dark:text-slate-400 whitespace-nowrap" title="{{ $log->created_at }}">
-                                        {{ \Carbon\Carbon::parse($log->created_at)->format('Y-m-d H:i:s') }}
-                                        <span class="text-[10px] text-slate-400">({{ \Carbon\Carbon::parse($log->created_at)->diffForHumans() }})</span>
+                                    <td data-label="{{ __('Timestamp') }}" class="text-slate-500 dark:text-slate-400">
+                                        <span class="block whitespace-nowrap md:whitespace-normal" title="{{ $log->created_at }}">
+                                            {{ \Carbon\Carbon::parse($log->created_at)->format('Y-m-d H:i:s') }}
+                                        </span>
+                                        <span class="block whitespace-nowrap text-[10px] text-slate-400">({{ \Carbon\Carbon::parse($log->created_at)->diffForHumans() }})</span>
                                     </td>
                                 </tr>
                             @empty

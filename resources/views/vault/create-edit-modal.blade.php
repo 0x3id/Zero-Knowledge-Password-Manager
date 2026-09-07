@@ -1,10 +1,10 @@
 {{-- Vault item create/edit modal — ciphertext fields are populated client-side by vault.js --}}
 <div id="vault-item-modal"
-     class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/75 backdrop-blur-md px-4 py-6"
+     class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/75 backdrop-blur-md px-4 [padding-top:max(env(safe-area-inset-top),1rem)] [padding-bottom:max(env(safe-area-inset-bottom),1.5rem)]"
      role="dialog"
      aria-modal="true"
      aria-labelledby="vault-item-heading">
-    <div class="w-full max-w-lg m-auto glass-card rounded-2xl p-6 shadow-2xl space-y-4 animate-scale-in">
+    <div class="w-full max-w-lg m-auto glass-card rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4 animate-scale-in">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-3">
             <h3 id="vault-item-heading" class="text-lg font-bold text-slate-900 dark:text-white">{{ __('Create New Vault Item') }}</h3>
             <x-encryption-badge />
@@ -90,11 +90,11 @@
                           class="mt-1 zkpm-input"></textarea>
             </div>
 
-            <div class="flex justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-700/80">
-                <button type="button" id="vault-item-cancel" class="zkpm-btn-secondary">
+            <div class="flex flex-col-reverse gap-3 pt-3 border-t border-slate-200 dark:border-slate-700/80 sm:flex-row sm:justify-end">
+                <button type="button" id="vault-item-cancel" class="zkpm-btn-secondary w-full sm:w-auto">
                     {{ __('Cancel') }}
                 </button>
-                <button type="submit" class="zkpm-btn-primary">
+                <button type="submit" class="zkpm-btn-primary w-full sm:w-auto">
                     {{ __('Save Item') }}
                 </button>
             </div>

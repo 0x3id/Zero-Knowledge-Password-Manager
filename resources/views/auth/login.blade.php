@@ -57,12 +57,12 @@
 
         <div id="login-error" class="mt-4 hidden rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 p-3 text-sm text-red-700 dark:text-red-300" role="alert"></div>
 
-        <div class="mt-6 flex items-center justify-between gap-4">
+        <div class="mt-6 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <a class="text-sm text-slate-600 dark:text-slate-400 underline hover:text-blue-600 dark:hover:text-blue-400 transition" href="{{ route('recovery') }}">
                 {{ __('Forgot your password?') }}
             </a>
 
-            <button type="submit" id="login-submit" class="zkpm-btn-primary min-w-[140px] active:scale-95">
+            <button type="submit" id="login-submit" class="zkpm-btn-primary min-w-[140px] active:scale-95 w-full sm:w-auto">
                 <svg data-spinner class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                     <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>

@@ -1,6 +1,6 @@
 {{-- Category management modal --}}
-<div id="category-manager-modal" class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/75 backdrop-blur-md px-4 py-6" role="dialog" aria-modal="true">
-    <div class="w-full max-w-md m-auto glass-card rounded-2xl p-6 shadow-2xl space-y-4 animate-scale-in">
+<div id="category-manager-modal" class="fixed inset-0 z-50 hidden flex overflow-y-auto bg-black/75 backdrop-blur-md px-4 [padding-top:max(env(safe-area-inset-top),1rem)] [padding-bottom:max(env(safe-area-inset-bottom),1.5rem)]" role="dialog" aria-modal="true">
+    <div class="w-full max-w-md m-auto glass-card rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4 animate-scale-in">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-3">
             <h3 class="text-base font-bold text-slate-900 dark:text-white">{{ __('Manage Categories') }}</h3>
             <button type="button" id="category-manager-close" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-sm p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="{{ __('Close') }}">

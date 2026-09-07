@@ -57,7 +57,7 @@
          collapses, using logical padding-inline for correct RTL/LTR. --}}
     <header :class="$store.sidebar.expanded ? 'lg:ps-64' : 'lg:ps-16'"
             class="sticky top-0 z-20 border-b bg-[var(--vc-surface)] backdrop-blur-glass border-[var(--vc-border)] transition-[padding-inline-start] duration-300 ease-in-out [padding-top:env(safe-area-inset-top)]">
-        <div class="flex h-14 items-center gap-2 px-4 sm:px-6 lg:h-16 lg:ps-0 lg:pe-4">
+        <div class="flex h-14 items-center gap-1.5 px-3 sm:gap-2 sm:px-6 lg:h-16 lg:ps-0 lg:pe-4">
 
             {{-- Hamburger / collapse toggle (always visible on ALL screen sizes) --}}
             <button type="button"
@@ -79,7 +79,7 @@
                     <x-brand-mark class="h-9 w-9 rounded-xl" />
                     <span aria-hidden="true" class="absolute -bottom-0.5 -end-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500 dark:border-cyber-black"></span>
                 </span>
-                <span class="hidden flex-col leading-none sm:flex">
+                <span class="hidden flex-col leading-none md:flex">
                     <span class="text-sm font-bold tracking-tight text-slate-900 dark:text-white">
                         ZeroKnowledge<span class="text-[var(--vc-accent)]">PM</span>
                     </span>
@@ -90,49 +90,72 @@
             </a>
 
             {{-- Right cluster --}}
-            <div class="ms-auto flex items-center gap-2">
+            <div class="ms-auto flex items-center gap-1.5 sm:gap-2">
+
+                {{-- Persistent auto-lock countdown chip — visible on < lg so the
+                     widget stays in view without opening the drawer; mirrors the
+                     sidebar widget and is driven by console.js. Icon is dropped
+                     on phones to keep the topbar within viewport. --}}
+                <div id="auto-lock-chip"
+                     class="auto-lock-widget mobile-autolock-chip lg:hidden"
+                     role="status"
+                     aria-live="polite"
+                     title="{{ __('Auto-lock') }}">
+                    <span class="hidden sm:inline-flex shrink-0 text-[var(--vc-accent)]" aria-hidden="true">
+                        <x-icon-lock class="h-3 w-3" />
+                    </span>
+                    <span data-autolock-time class="vc-mono text-[11px] font-medium tabular-nums">30:00</span>
+                </div>
 
                 <button type="button"
                         id="nav-lock-btn"
                         title="{{ __('Lock Vault') }}"
-                        class="trigger-lock-btn inline-flex h-9 items-center gap-1.5 rounded-lg border border-amber-300/50 bg-white/40 px-3 text-xs font-semibold text-amber-700 backdrop-blur-glass shadow-glass-sm transition duration-200 ease-in-out hover:-translate-y-px hover:bg-white/60 hover:border-amber-400/70 hover:shadow-glass active:translate-y-0 active:scale-95 dark:border-amber-400/25 dark:bg-white/[0.045] dark:text-amber-300 dark:hover:bg-white/[0.08] dark:hover:border-amber-300/50">
-                    <x-icon-lock class="hidden h-3.5 w-3.5 sm:inline" />
-                    <span>{{ __('Lock Vault') }}</span>
+                        class="trigger-lock-btn inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-amber-300/50 bg-white/40 px-0 text-xs font-semibold text-amber-700 backdrop-blur-glass shadow-glass-sm transition duration-200 ease-in-out hover:-translate-y-px hover:bg-white/60 hover:border-amber-400/70 hover:shadow-glass active:translate-y-0 active:scale-95 dark:border-amber-400/25 dark:bg-white/[0.045] dark:text-amber-300 dark:hover:bg-white/[0.08] dark:hover:border-amber-300/50 sm:gap-1.5 sm:px-3 sm:w-auto">
+                    <x-icon-lock class="h-3.5 w-3.5" />
+                    <span class="hidden sm:inline">{{ __('Lock Vault') }}</span>
                 </button>
 
                 <x-theme-switcher />
-                <x-language-switcher />
 
-                <x-dropdown align="end" width="48">
-                    <x-slot name="trigger">
-                        <button class="glass-btn inline-flex items-center gap-2 p-1.5 pe-3 text-sm font-medium text-slate-600 transition duration-200 ease-in-out hover:-translate-y-px hover:text-[var(--vc-text)] active:translate-y-0 active:scale-95 text-[var(--vc-text-dim)]">
-                            <span class="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-[var(--vc-accent)] to-[color-mix(in_srgb,var(--vc-accent)_55%,var(--vc-bg))] text-[10px] font-bold uppercase text-[var(--vc-bg)]">
-                                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-                            </span>
-                            <span class="hidden max-w-[130px] truncate sm:inline">{{ auth()->user()->name }}</span>
-                            <x-icon-chevron-down class="h-4 w-4 text-slate-400" />
-                        </button>
-                    </x-slot>
+                {{-- Language switcher + identity menu are reachable from the
+                     drawer on phones (the sidebar shows the profile + controls);
+                     shown directly once ≥ sm where the topbar has the room. --}}
+                <div class="hidden sm:block">
+                    <x-language-switcher />
+                </div>
 
-                    <x-slot name="content">
-                        <div class="border-b border-slate-100 px-4 py-2.5 text-xs text-slate-400 dark:border-slate-700">
-                            {{ __('Signed in as') }}<br>
-                            <span class="font-semibold text-slate-700 dark:text-slate-200">{{ auth()->user()->email }}</span>
-                        </div>
+                <div class="hidden sm:block">
+                    <x-dropdown align="end" width="48">
+                        <x-slot name="trigger">
+                            <button class="glass-btn inline-flex items-center gap-2 p-1.5 pe-3 text-sm font-medium text-slate-600 transition duration-200 ease-in-out hover:-translate-y-px hover:text-[var(--vc-text)] active:translate-y-0 active:scale-95 text-[var(--vc-text-dim)]">
+                                <span class="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-[var(--vc-accent)] to-[color-mix(in_srgb,var(--vc-accent)_55%,var(--vc-bg))] text-[10px] font-bold uppercase text-[var(--vc-bg)]">
+                                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+                                </span>
+                                <span class="hidden max-w-[130px] truncate sm:inline">{{ auth()->user()->name }}</span>
+                                <x-icon-chevron-down class="h-4 w-4 text-slate-400" />
+                            </button>
+                        </x-slot>
 
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile & Passkeys') }}
-                        </x-dropdown-link>
+                        <x-slot name="content">
+                            <div class="border-b border-slate-100 px-4 py-2.5 text-xs text-slate-400 dark:border-slate-700">
+                                {{ __('Signed in as') }}<br>
+                                <span class="font-semibold text-slate-700 dark:text-slate-200">{{ auth()->user()->email }}</span>
+                            </div>
 
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                            <x-dropdown-link :href="route('profile.edit')">
+                                {{ __('Profile & Passkeys') }}
                             </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
             </div>
         </div>
     </header>

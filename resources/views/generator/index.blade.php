@@ -1,13 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <div>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="min-w-0">
                 <h2 class="zkpm-page-header">{{ __('Password Generator') }}</h2>
                 <p class="zkpm-page-subtitle">
                     {{ __('Multi-mode cryptographic password generator with live k-Anonymity breach detection') }}
                 </p>
             </div>
-            <x-security-badge type="encrypted" :label="__('k-Anonymity')" />
+            <x-security-badge type="encrypted" :label="__('k-Anonymity')" class="shrink-0 w-fit" />
         </div>
     </x-slot>
 

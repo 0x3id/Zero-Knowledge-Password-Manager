@@ -27,12 +27,12 @@
                           autofocus />
         </div>
 
-        <div class="mt-6 flex items-center justify-between gap-4">
+        <div class="mt-6 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <a class="text-sm text-slate-600 dark:text-slate-400 underline hover:text-blue-600 dark:hover:text-blue-400 transition" href="{{ route('recovery') }}">
                 {{ __('Lost your device?') }}
             </a>
 
-            <button type="submit" id="totp-submit" class="zkpm-btn-primary disabled:opacity-50">
+            <button type="submit" id="totp-submit" class="zkpm-btn-primary disabled:opacity-50 w-full sm:w-auto">
                 {{ __('Verify') }}
             </button>
         </div>

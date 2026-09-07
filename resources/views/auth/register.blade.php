@@ -65,6 +65,8 @@
                class="mt-1.5 hidden items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400"
                role="status">
                 <x-icon-verified class="h-3.5 w-3.5" />
+                {{ __('Caps Lock is on') }}
+            </p>
             <div class="mt-3 flex items-center gap-2" aria-hidden="true">
                 <div class="zkpm-strength-bar flex-1">
                     <div id="register-strength-bar" data-strength-bar class="zkpm-strength-bar-fill bg-slate-300 dark:bg-slate-600" style="width: 0%"></div>
@@ -105,14 +107,19 @@
             <p id="register-caps-hint-confirm" data-capslock-panel
                class="mt-1.5 hidden items-center gap-1 text-[11px] font-semibold text-amber-600 dark:text-amber-400"
                role="status">
-                <x-icon-verified class="h-3.5 w-3.5" /> class="mt-4 hidden rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 p-3 text-sm text-red-700 dark:text-red-300"></div>
+                <x-icon-verified class="h-3.5 w-3.5" />
+                {{ __('Caps Lock is on') }}
+            </p>
+        </div>
 
-        <div class="mt-6 flex items-center justify-between gap-4">
+        <div id="register-error" class="mt-4 hidden rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/60 p-3 text-sm text-red-700 dark:text-red-300" role="alert"></div>
+
+        <div class="mt-6 flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <a class="text-sm text-slate-600 dark:text-slate-400 underline hover:text-blue-600 dark:hover:text-blue-400 transition" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 
-            <button type="submit" id="register-submit" class="zkpm-btn-primary min-w-[140px] active:scale-95">
+            <button type="submit" id="register-submit" class="zkpm-btn-primary min-w-[140px] active:scale-95 w-full sm:w-auto">
                 <svg data-spinner class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                     <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>

@@ -16,23 +16,27 @@
 
         <title>{{ config('app.name', 'ZeroKnowledgePM') }} — {{ __('Vault') }}</title>
 
-        {{-- No-flicker theme bootstrap: resolved before first paint.
-            Vault Console defaults to DARK (data-theme on <html>) and stays
-            in sync with Tailwind's `.dark` class. --}}
+        {{-- No-flicker theme bootstrap: synchronous, runs BEFORE any <link>/CSS
+            so the data-theme attribute is present before the first paint.
+            App default = DARK. Preference: localStorage, else OS
+            prefers-color-scheme, else dark. Sets data-theme on <html>
+            (body doesn't exist yet) and mirrors Tailwind's `.dark` class. --}}
         <script nonce="{{ $cspNonce ?? '' }}">
             (function () {
-                var theme = localStorage.getItem('zkpm_theme') || 'dark';
+                var theme = localStorage.getItem('zkpm_theme');
+                if (theme !== 'dark' && theme !== 'light') {
+                    theme = 'dark';
+                }
                 var root = document.documentElement;
                 root.setAttribute('data-theme', theme);
                 root.classList.toggle('dark', theme === 'dark');
                 document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#0f1720' : '#f6f8fa');
+                root.classList.add('js');
             })();
         </script>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=space+grotesk:500,600,700|inter:400,500,600|jetbrains+mono:400,500|cairo:400,500,600,700|tajawal:400,500,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @include('components.i18n-script')
@@ -46,7 +50,7 @@
                  `padding-inline-start` so it flips automatically in RTL.
                  On mobile/tablet the drawer overlays, so no offset. --}}
             <div :class="$store.sidebar.expanded ? 'lg:ps-64' : 'lg:ps-16'"
-                 class="transition-all duration-300 ease-in-out">
+                 class="transition-[padding-inline-start] duration-300 ease-in-out">
                 @isset($header)
                     <header class="border-b bg-[var(--vc-surface)] border-[var(--vc-border)]">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

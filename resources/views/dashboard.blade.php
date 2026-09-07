@@ -16,12 +16,12 @@
                     @endif
                 </p>
             </div>
-            <div class="flex items-center gap-2">
-                <a href="{{ route('vault') }}" class="zkpm-btn-secondary">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <a href="{{ route('vault') }}" class="zkpm-btn-secondary justify-center">
                     <x-icon-vault class="h-5 w-5" />
                     {{ __('Open Vault') }}
                 </a>
-                <a href="{{ route('generator') }}" class="zkpm-btn-primary">
+                <a href="{{ route('generator') }}" class="zkpm-btn-primary justify-center">
                     <x-icon-generator class="h-5 w-5" />
                     {{ __('Generate Password') }}
                 </a>
