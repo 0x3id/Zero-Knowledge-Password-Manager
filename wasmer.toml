@@ -1,0 +1,12 @@
+[package]
+name = "zero-knowledge-pm"
+version = "0.1.0"
+description = "Zero-Knowledge Password Manager"
+
+[build]
+command = "composer install --no-dev --optimize-autoloader && npm ci && npm run build"
+
+[[command]]
+name = "web"
+module = "php"
+runner = "https://webc.org/laravel"
