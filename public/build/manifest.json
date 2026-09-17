@@ -1,0 +1,47 @@
+{
+  "node_modules/qrcode/lib/browser.js": {
+    "file": "assets/browser-fafXhJiv.js",
+    "name": "browser",
+    "src": "node_modules/qrcode/lib/browser.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BqXFjCkb.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-B_35Qhfe.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/qrcode/lib/browser.js",
+      "resources/js/vault.js",
+      "resources/js/generator.js"
+    ]
+  },
+  "resources/js/generator.js": {
+    "file": "assets/generator-Cee097FR.js",
+    "name": "generator",
+    "src": "resources/js/generator.js",
+    "isDynamicEntry": true
+  },
+  "resources/js/vault.js": {
+    "file": "assets/vault-q2AztVQ5.js",
+    "name": "vault",
+    "src": "resources/js/vault.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.js",
+      "resources/js/generator.js"
+    ]
+  }
+}
