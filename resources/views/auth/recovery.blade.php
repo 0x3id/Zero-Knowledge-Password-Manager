@@ -30,7 +30,7 @@
             @csrf
             <div>
                 <x-input-label for="recovery-otp" :value="__('6-digit code from email')" class="zkpm-label" />
-                <x-text-input id="recovery-otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" class="mt-1 block w-full text-center text-2xl tracking-[0.5em]" required />
+                <x-text-input id="recovery-otp" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" class="mt-1 block w-full text-center rounded-xl zkpm-otp-input" required />
             </div>
             <div x-data="{ showKey: false }">
                 <x-input-label for="recovery-key-input" :value="__('Recovery key')" class="zkpm-label" />
@@ -39,11 +39,11 @@
                            :type="showKey ? 'text' : 'password'"
                            autocomplete="off" required
                            placeholder="xxxx-xxxx-xxxx-xxxx-xxxx"
-                           class="zkpm-input pr-10 font-mono">
+                           class="zkpm-input pe-12 font-mono">
                     <button type="button"
                             @click="showKey = ! showKey"
                             :aria-label="showKey ? 'Hide' : 'Reveal'"
-                            class="absolute end-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
+                            class="zkpm-reveal-btn absolute end-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
                         <x-icon-biometric x-show="! showKey" class="h-4 w-4" />
                     </button>
                 </div>
@@ -72,11 +72,11 @@
                     <input id="new-master-password" type="password" minlength="12" autocomplete="new-password" required
                            :type="show ? 'text' : 'password'"
                            placeholder="••••••••••••"
-                           class="zkpm-input pr-10">
+                           class="zkpm-input pe-12">
                     <button type="button"
                             @click="show = ! show"
                             :aria-label="show ? 'Hide' : 'Reveal'"
-                            class="absolute end-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
+                            class="zkpm-reveal-btn absolute end-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
                         <x-icon-biometric x-show="! show" class="h-4 w-4" />
                     </button>
                 </div>
@@ -87,11 +87,11 @@
                     <input id="new-master-password-confirm" type="password" autocomplete="new-password" required
                            :type="show ? 'text' : 'password'"
                            placeholder="••••••••••••"
-                           class="zkpm-input pr-10">
+                           class="zkpm-input pe-12">
                     <button type="button"
                             @click="show = ! show"
                             :aria-label="show ? 'Hide' : 'Reveal'"
-                            class="absolute end-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
+                            class="zkpm-reveal-btn absolute end-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200">
                         <x-icon-biometric x-show="! show" class="h-4 w-4" />
                     </button>
                 </div>

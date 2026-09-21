@@ -25,15 +25,15 @@
                 {{-- Social links — real profiles --}}
                 <div class="mt-5 flex items-center gap-5">
                     <a href="https://www.facebook.com/eid.yasser.eid.2025" target="_blank" rel="noopener noreferrer" title="Facebook" aria-label="Facebook" data-social="facebook"
-                       class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
+                       class="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
                         <x-icon-social-facebook class="h-5 w-5" />
                     </a>
                     <a href="https://github.com/0x3id" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub" data-social="github"
-                       class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
+                       class="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
                         <x-icon-social-github class="h-5 w-5" />
                     </a>
                     <a href="https://0x3id-portfolio.vercel.app" target="_blank" rel="noopener noreferrer" title="{{ __('Footer portfolio') }}" aria-label="{{ __('Footer portfolio') }}" data-social="portfolio"
-                       class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
+                       class="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:border-[color:var(--vc-accent)]/50 hover:text-[var(--vc-accent)] border-[var(--vc-border)] bg-[var(--vc-surface)] text-[var(--vc-text-dim)] hover:shadow-glow-sm hover:-translate-y-0.5">
                         <x-icon-social-portfolio class="h-5 w-5" />
                     </a>
                 </div>

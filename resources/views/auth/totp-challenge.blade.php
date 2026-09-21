@@ -21,7 +21,7 @@
                           pattern="[0-9]{6}"
                           maxlength="6"
                           autocomplete="one-time-code"
-                          class="mt-1 block w-full text-center text-2xl tracking-[0.5em]"
+                          class="mt-1 block w-full text-center rounded-xl zkpm-otp-input"
                           placeholder="000000"
                           required
                           autofocus />

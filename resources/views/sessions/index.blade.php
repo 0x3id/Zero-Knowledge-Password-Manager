@@ -8,7 +8,7 @@
             @if(count($sessions) > 1)
                 <form method="POST" action="{{ route('sessions.destroy-others') }}" onsubmit="return confirm(@js(__('Revoke all others confirm')));">
                     @csrf
-                    <button type="submit" class="zkpm-btn-danger">
+                    <button type="submit" class="zkpm-btn-danger w-full sm:w-auto justify-center">
                         <x-icon-logout class="w-4 h-4" />
                         {{ __('Revoke All Other Devices') }}
                     </button>
@@ -63,9 +63,9 @@
                                     </div>
                                     <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1">
                                         <span>{{ __('IP') }}: <code class="font-mono text-slate-700 dark:text-slate-300">{{ $sess->ip_address }}</code></span>
-                                        <span>•</span>
+                                        <span class="hidden sm:inline">•</span>
                                         <span>{{ __('Last active') }}: <strong class="text-slate-700 dark:text-slate-300">{{ \Carbon\Carbon::parse($sess->last_active_at)->diffForHumans() }}</strong></span>
-                                        <span>•</span>
+                                        <span class="hidden sm:inline">•</span>
                                         <span>{{ __('Expires') }}: {{ \Carbon\Carbon::parse($sess->expires_at)->format('M d, H:i') }}</span>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                     <form method="POST" action="{{ route('sessions.destroy', $sess->id) }}" onsubmit="return confirm(@js(__('Revoke device confirm')));">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800/60 transition">
+                                        <button type="submit" class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-semibold text-red-700 transition hover:bg-red-100 sm:w-auto dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-900/40">
                                             {{ __('Revoke Device') }}
                                         </button>
                                     </form>

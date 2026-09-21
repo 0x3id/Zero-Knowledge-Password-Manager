@@ -7,7 +7,7 @@
             </div>
             <form method="GET" action="{{ route('audit-logs.index') }}" class="flex flex-wrap items-center gap-2">
                 <select name="action_type" onchange="this.form.submit()"
-                        class="max-w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:border-blue-500 focus:outline-none shadow-sm">
+                        class="w-full min-h-11 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:border-blue-500 focus:outline-none shadow-sm sm:w-auto">
                     <option value="">{{ __('All Security Events') }}</option>
                     <option value="login" {{ $currentAction === 'login' ? 'selected' : '' }}>{{ __('User Login') }}</option>
                     <option value="logout" {{ $currentAction === 'logout' ? 'selected' : '' }}>{{ __('User Logout') }}</option>
@@ -23,7 +23,7 @@
                     <option value="recovery_used" {{ $currentAction === 'recovery_used' ? 'selected' : '' }}>{{ __('Recovery Used') }}</option>
                 </select>
                 @if ($currentAction)
-                    <a href="{{ route('audit-logs.index') }}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline">{{ __('Clear filter') }}</a>
+                    <a href="{{ route('audit-logs.index') }}" class="inline-flex items-center min-h-11 px-1 text-xs text-blue-600 dark:text-blue-400 hover:underline">{{ __('Clear filter') }}</a>
                 @endif
             </form>
         </div>
@@ -40,8 +40,11 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden p-6 space-y-4">
-                <div class="overflow-x-auto scrollbar-cyber">
+            <div class="glass-card overflow-hidden p-5 sm:p-6 space-y-4">
+                {{-- Stacked labeled cards on mobile (base); the tabular layout
+                     only returns from `md` (768px) up. No horizontal scroll
+                     container exists on phones. --}}
+                <div class="md:overflow-x-auto md:scrollbar-cyber">
                     <table class="zkpm-table">
                         <thead>
                             <tr>
@@ -81,10 +84,10 @@
                                         <span class="break-all">{{ $log->ip_address ?? '-' }}</span>
                                     </td>
                                     <td data-label="{{ __('Timestamp') }}" class="text-slate-500 dark:text-slate-400">
-                                        <span class="block whitespace-nowrap md:whitespace-normal" title="{{ $log->created_at }}">
+                                        <span class="block md:whitespace-nowrap" title="{{ $log->created_at }}">
                                             {{ \Carbon\Carbon::parse($log->created_at)->format('Y-m-d H:i:s') }}
                                         </span>
-                                        <span class="block whitespace-nowrap text-[10px] text-slate-400">({{ \Carbon\Carbon::parse($log->created_at)->diffForHumans() }})</span>
+                                        <span class="block text-[10px] text-slate-400 md:whitespace-nowrap">({{ \Carbon\Carbon::parse($log->created_at)->diffForHumans() }})</span>
                                     </td>
                                 </tr>
                             @empty

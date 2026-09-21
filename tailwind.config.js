@@ -13,6 +13,19 @@ export default {
 
     theme: {
         extend: {
+            /* MOBILE-FIRST breakpoint system — mobile is the default (no
+               media query, ≤ 480px). Larger screens are progressive
+               enhancements added via these min-width screens only:
+                 sm = 481px  (large phones)
+                 md = 768px  (tablets)
+                 lg = 1025px (desktop)
+               These mirror the custom `min-width` media queries in
+               resources/css/app.css so utilities and custom CSS agree. */
+            screens: {
+                'sm': '481px',
+                'md': '768px',
+                'lg': '1025px',
+            },
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
                 display: ['Space Grotesk', 'Inter', ...defaultTheme.fontFamily.sans],

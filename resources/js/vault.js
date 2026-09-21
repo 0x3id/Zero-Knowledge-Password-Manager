@@ -383,12 +383,13 @@ function renderItemCard(item) {
     identity.querySelector('h4').textContent = item.title;
     identity.querySelector('p').textContent = item.username;
 
-    const actionGroup = document.createElement('div');
-    actionGroup.className = 'flex flex-wrap items-center gap-2 pt-2 sm:pt-0';
-
     const passwordDisplay = document.createElement('span');
     passwordDisplay.className =
-        'font-mono text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 min-w-[90px] text-center select-all';
+        'vault-card-password font-mono text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 min-w-[90px] text-center select-all';
+
+    const actionGroup = document.createElement('div');
+    actionGroup.className =
+        'vault-card-actions flex flex-wrap items-center gap-2 pt-2 sm:flex-none sm:pt-0';
     passwordDisplay.textContent = '••••••••••••';
 
     const maskedPassword = '••••••••••••';
@@ -755,15 +756,15 @@ export function initVault() {
             event.preventDefault();
             hideFormError();
 
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
+            const submitButton = document.getElementById('vault-item-submit');
+            if (submitButton) submitButton.disabled = true;
 
             try {
                 await saveItem(form);
             } catch (error) {
                 showFormError(error instanceof Error ? error.message : window.zkpmT('Save failed.'));
             } finally {
-                submitButton.disabled = false;
+                if (submitButton) submitButton.disabled = false;
             }
         });
     }

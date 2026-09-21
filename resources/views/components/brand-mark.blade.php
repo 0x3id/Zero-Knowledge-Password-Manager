@@ -1,28 +1,37 @@
 {{-- ZeroKnowledgePM brand mark: Vault Console tile — steel-navy plate with a
-     phosphor-green faceted shield + circuit keyhole, matching the line-icon language. --}}
+     phosphor-green faceted shield + circuit keyhole, matching the line-icon language.
+
+     Gradient IDs are suffixed with a per-render token so every instance of this
+     SVG on a page owns its own paint-server definitions. SVG `url(#id)` lookups
+     resolve document-wide to the FIRST matching element; without unique IDs the
+     visible topbar/footer instances referenced definitions living inside the
+     `display:none` desktop sidebar, which WebKit/Safari (and some other engines)
+     refuse to paint — the brand vanished on phones while it rendered on laptops
+     where that first instance was visible. --}}
+@php($uid = \Illuminate\Support\Str::random(8))
 <svg class="{{ $class ?? 'h-8 w-8' }}" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
-        <linearGradient id="zkpmTile" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="zkpmTile-{{ $uid }}" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#16202c"/>
             <stop offset="1" stop-color="#0b1118"/>
         </linearGradient>
-        <radialGradient id="zkpmGlow" cx="0.5" cy="0.4" r="0.6">
+        <radialGradient id="zkpmGlow-{{ $uid }}" cx="0.5" cy="0.4" r="0.6">
             <stop offset="0" stop-color="#3ecf8e" stop-opacity="0.30"/>
             <stop offset="1" stop-color="#3ecf8e" stop-opacity="0"/>
         </radialGradient>
-        <linearGradient id="zkpmShield" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="zkpmShield-{{ $uid }}" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#7df4ba"/>
             <stop offset="0.5" stop-color="#3ecf8e"/>
             <stop offset="1" stop-color="#1f9d6b"/>
         </linearGradient>
     </defs>
-    <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmTile)"/>
-    <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmGlow)"/>
+    <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmTile-{{ $uid }})"/>
+    <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#zkpmGlow-{{ $uid }})"/>
     <rect x="24" y="24" width="464" height="464" rx="110" fill="none" stroke="#3ecf8e" stroke-opacity="0.18" stroke-width="5"/>
 
     {{-- Faceted gem shield (Vault Console signature) --}}
     <path d="M256 124 L360 164 V244 L256 384 L152 244 V164 Z"
-          fill="url(#zkpmShield)" stroke="url(#zkpmShield)" stroke-width="5" stroke-linejoin="round"/>
+          fill="url(#zkpmShield-{{ $uid }})" stroke="url(#zkpmShield-{{ $uid }})" stroke-width="5" stroke-linejoin="round"/>
 
     {{-- Shield facets (temper line + top seam) --}}
     <path d="M210 252 L302 252" stroke="#0b1118" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"/>

@@ -46,6 +46,7 @@
            x-transition:leave-start="opacity-100 drawer-slide-zero"
            x-transition:leave-end="opacity-0 drawer-slide-out"
            class="fixed inset-y-0 start-0 z-50 flex w-72 flex-col overflow-hidden border-e bg-[var(--vc-surface)] backdrop-blur-glass border-[var(--vc-border)] lg:hidden"
+           id="mobile-drawer"
            aria-label="{{ __('Sidebar') }}">
         @include('layouts.sidebar-content')
     </aside>
@@ -74,7 +75,7 @@
                 <x-icon-chevron-right x-show="$store.sidebar.desktop && $store.sidebar.mini" x-cloak class="h-4 w-4 rtl:scale-x-[-1]" />
             </button>
 
-            <a href="{{ route('dashboard') }}" class="group flex items-center gap-2.5 lg:hidden" aria-label="ZeroKnowledgePM">
+            <a href="{{ route('dashboard') }}" class="group flex shrink-0 items-center gap-2.5 lg:hidden" aria-label="ZeroKnowledgePM">
                 <span class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl shadow-glow-sm transition group-hover:scale-105 group-hover:shadow-glow group-active:scale-95">
                     <x-brand-mark class="h-9 w-9 rounded-xl" />
                     <span aria-hidden="true" class="absolute -bottom-0.5 -end-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500 dark:border-cyber-black"></span>

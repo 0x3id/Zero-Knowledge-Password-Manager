@@ -25,7 +25,7 @@
    When the desktop sidebar is collapsed into a mini rail it carries the
    `data-collapsed="true"` attribute. These rules hide text labels and centre
    the icon tiles. Logical properties keep RTL/LTR symmetry. The mobile
-   drawer (>= 1024px hidden, < 1024px full) never has this attribute. */
+   drawer (>= 1025px hidden, < 1025px full) never has this attribute. */
 .sidebar-desktop[data-collapsed="true"] .sidebar-text { display: none; }
 .sidebar-desktop[data-collapsed="true"] .sidebar-brand { justify-content: center; padding-inline: 0; }
 .sidebar-desktop[data-collapsed="true"] .sidebar-quick-row { flex-direction: column; }
@@ -207,21 +207,27 @@
         accent-color: var(--zkpm-accent);
     }
 
-    /* Prevent iOS Safari from auto-zooming into fields on focus
-       (fonts below 16px trigger the zoom). Mobile-first 16px inputs,
-       desktop keeps its compact sizing. */
-    @media (max-width: 767px) {
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="search"],
-        input[type="number"],
-        input[type="tel"],
-        input[type="url"],
-        textarea,
-        select {
-            font-size: 16px !important;
-        }
+    /* Prevent iOS Safari from auto-zooming into fields on focus: every form
+       control renders at a minimum 16px on ALL viewports. This is a base
+       rule (no media query) because 16px inputs are the mobile-first default
+       and the iOS auto-zoom only occurs when fields drop below 16px. */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
+
+    /* Never let the page scroll horizontally at any width (≥ 320px).
+       `clip` does NOT create a scroll container, so fixed/sticky topbars,
+       modals and the desktop rail keep working as expected. */
+    body {
+        overflow-x: clip;
     }
 }
 
@@ -270,6 +276,7 @@
     /* Primary/secondary/danger buttons — solid console fills. */
     .zkpm-btn-primary {
         @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-bold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        min-height: 44px;
         background: var(--vc-accent);
         border-color: transparent;
         color: #0f1720;
@@ -283,6 +290,7 @@
 
     .zkpm-btn-secondary {
         @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-semibold transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50;
+        min-height: 44px;
         background: transparent;
         border-color: var(--vc-border);
         color: var(--vc-text-dim);
@@ -298,6 +306,7 @@
 
     .zkpm-btn-danger {
         @apply inline-flex items-center justify-center gap-1.5 rounded-[10px] border px-4 py-3 text-xs font-semibold uppercase tracking-wider transition duration-200 ease-in-out active:translate-y-0 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed;
+        min-height: 44px;
         background: color-mix(in srgb, var(--vc-danger) 12%, transparent);
         border-color: color-mix(in srgb, var(--vc-danger) 45%, transparent);
         color: var(--vc-danger);
@@ -623,44 +632,57 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE BREAKPOINT SYSTEM (Vault Console)
+   RESPONSIVE BREAKPOINT SYSTEM (Vault Console) — MOBILE-FIRST
    ─────────────────────────────────────────────────────────────────────────
-   The app aligns with Tailwind's default breakpoints (already used across
-   every view) — they are the single source of truth and are NOT re-declared
-   ad-hoc per component:
+   Mobile is the PRIMARY, default experience. Base (no-media-query) rules
+   target phone widths (≤ 480px): single-column layouts, full-width cards,
+   stacked content, ≥ 44px touch targets. Larger screens are progressive
+   enhancements layered on with `min-width` queries ONLY — never `max-width`
+   queries that strip a desktop layout down to fit narrow screens.
 
-     Mobile            < 640px            (default / no `sm` prefix)
-     Large mobile      ≥ 640px  & < 768px (`sm:`)
-     Tablet            ≥ 768px  & < 1024px(`md:`)
-     Desktop rail      ≥ 1024px           (`lg:` — fixed sidebar appears)
+     Base             no media query        (mobile phones, ≤ 480px)
+     min-width: 481px large phones
+     min-width: 768px tablets
+     min-width: 1025px desktop
 
-   Small-phone overrides (≤ 420px) and the mobile stacked-table cards are
-   handled with explicit max-width media queries below so the densest
-   screens stay clean without drifting into ad-hoc per-component widths.
+   These match Tailwind's `sm` / `md` / `lg` screens (redefined in
+   tailwind.config.js to 481px / 768px / 1025px) so utility classes and the
+   custom CSS below agree on identical breakpoints.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── Small-phone guard (≤ 420px) — tighten horizontal rhythm so long
-      labels, buttons and header clusters never overflow the viewport. ── */
-@media (max-width: 420px) {
-    .zkpm-page-header {
-        font-size: 1.35rem;
-    }
+/* ── Base small-phone rhythm (mobile default, no media query) ──────────────
+   Tighten horizontal rhythm so long labels, buttons and header clusters
+   never overflow 320px. This IS the default; larger screens only restore
+   a touch more scale from `min-width: 481px` upward. ── */
+.zkpm-page-header {
+    font-size: 1.35rem;
+}
 
-    /* Form submit rows stack their primary action full-width below any
-       secondary link/label to guarantee a ≥ 44px tap area and no wrap. */
-    .zkpm-form-row {
-        @apply items-stretch;
+/* Form submit rows stack their primary action full-width below any
+   secondary link/label to guarantee a ≥ 44px tap area and no wrapping. */
+.zkpm-form-row {
+    @apply items-stretch;
+}
+
+@media (min-width: 481px) {
+    .zkpm-page-header {
+        font-size: 1.5rem;
     }
 }
 
-/* ── Compact mobile theme pill ────────────────────────────────────────────
-   On phones the Dark/Light text labels are dropped, leaving the two icon
-   options only. This keeps the pill block within the topbar cluster so the
-   hamburger, logo, lock, user and swithchers never overflow at 375px. */
-@media (max-width: 639px) {
+/* ── Theme pill toggle — MOBILE-FIRST ─────────────────────────────────────
+   On phones (base) the Dark/Light text labels are dropped, leaving the two
+   icon options only so the pill fits the topbar cluster at 375px. Text
+   labels return once ≥ sm where the topbar has room. ── */
+.theme-pill-option {
+    width: 2rem;
+    padding: 0.3rem 0.25rem;
+}
+
+@media (min-width: 481px) {
     .theme-pill-option {
-        width: 2rem;
-        padding: 0.3rem 0.25rem;
+        width: 2.4rem;
+        padding: 0.3rem 0.4rem;
     }
 }
 
@@ -679,69 +701,250 @@
     border-radius: 9999px;
 }
 
-/* ── Audit-log table → stacked cards on mobile ────────────────────────────
-   Below `md` the tabular header is hidden and each row becomes a card whose
-   cells stack as labeled fields (via the `data-label` attribute rendered in
-   the Blade view). This eliminates the horizontal-scroll wrapper entirely. */
-@media (max-width: 767px) {
+/* ── Audit-log entries: stacked cards by default (mobile-first) ───────────
+   On every width below `md` each table row renders as a card whose cells
+   stack as labeled fields (via the `data-label` attribute rendered in the
+   Blade view). The tabular layout returns ONLY from `md` (768px) upward as
+   the enhanced layout. No horizontal-scroll wrapper is needed on mobile. ── */
+.zkpm-table thead {
+    display: none;
+}
+
+.zkpm-table tbody > tr {
+    display: block;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--vc-border);
+    border-radius: 0.875rem;
+    background: var(--vc-surface);
+    padding: 0.75rem;
+    box-shadow: var(--zkpm-shadow-sm);
+}
+
+.zkpm-table tbody > tr + tr {
+    border-top: 1px solid var(--vc-border);
+}
+
+.zkpm-table td {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.25rem;
+    border-top: 1px solid var(--vc-border);
+    text-align: end;
+    white-space: normal;
+}
+
+.zkpm-table td:first-child {
+    border-top: 0;
+}
+
+/* Label column rendered from `data-label` */
+.zkpm-table td::before {
+    content: attr(data-label);
+    flex: 0 0 40%;
+    text-align: start;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vc-text-dim);
+    white-space: normal;
+}
+
+/* Tabular layout = the progressive enhancement, tablet and up. */
+@media (min-width: 768px) {
     .zkpm-table thead {
-        display: none;
+        display: table-header-group;
     }
 
     .zkpm-table tbody > tr {
-        display: block;
-        margin-bottom: 0.75rem;
-        border: 1px solid var(--vc-border);
-        border-radius: 0.875rem;
-        background: var(--vc-surface);
-        padding: 0.75rem;
-        box-shadow: var(--zkpm-shadow-sm);
+        display: table-row;
+        margin-bottom: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .zkpm-table tbody > tr + tr {
+        border-top: 1px solid var(--vc-border);
     }
 
     .zkpm-table td {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 0.5rem 0.25rem;
-        border-top: 1px solid var(--vc-border);
-        text-align: end;
+        display: table-cell;
+        align-items: initial;
+        justify-content: initial;
+        gap: initial;
+        padding: 0.875rem 1rem;
+        border-top: 0;
+        text-align: initial;
     }
 
     .zkpm-table td:first-child {
         border-top: 0;
     }
 
-    /* Label column rendered from `data-label` */
     .zkpm-table td::before {
-        content: attr(data-label);
-        flex: 0 0 40%;
-        text-align: start;
-        font-family: 'JetBrains Mono', 'Inter', monospace;
-        font-size: 10px;
-        font-weight: 500;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--vc-text-dim);
-        white-space: normal;
+        content: none;
     }
 }
 
-/* ── Touch targets & safe-area refinements ────────────────────────────────
-   Guarantee minimum 44px tap targets on interactive elements and respect
-   the iPhone home-indicator for fixed/persistent bars and full modals. */
-@media (max-width: 767px) {
-    /* Vault card action buttons (Reveal / Copy / Edit / Delete) */
-    .vault-card-action {
-        min-height: 44px;
-        padding-top: 0.625rem;
-        padding-bottom: 0.625rem;
+/* ── Touch targets (base default, mobile-first) ───────────────────────────
+   Guarantee minimum 44px tap targets on interactive elements. These rules
+   are the mobile baseline and are NOT gated behind a media query. ── */
+.vault-card-action {
+    min-height: 44px;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+}
+
+#category-filter-list button {
+    min-height: 44px;
+}
+
+/* ── Vault item cards: thumb-friendly stacked actions (mobile-first) ──────
+   On phones the Reveal / Copy / Edit / Delete actions and the password
+   readout wrap into a full-width 2-column grid of ≥ 44px touch targets,
+   biased toward the bottom of the card for one-handed thumb reach. From
+   `md` up the actions collapse back to a compact inline row beside the
+   identity block (the desktop enhancement). ── */
+.vault-card-actions {
+    width: 100%;
+}
+
+.vault-card-actions .vault-card-action {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-height: 44px;
+}
+
+.vault-card-password {
+    flex-basis: 100%;
+}
+
+@media (min-width: 768px) {
+    .vault-card-actions {
+        width: auto;
     }
 
-    /* Category-filter pills */
-    #category-filter-list button {
-        min-height: 44px;
+    .vault-card-actions .vault-card-action {
+        flex: 0 1 auto;
     }
+
+    .vault-card-password {
+        flex-basis: auto;
+    }
+}
+
+/* ── Mobile primary navigation: bottom tab bar (< lg) ─────────────────────
+   The bottom tab bar is the PRIMARY mobile navigation pattern, fixed to the
+   bottom edge with safe-area support for the home indicator. It is hidden
+   from `lg` (1025px) upward where the desktop left-rail sidebar takes over
+   as the enhanced layout. ── */
+.mobile-tab-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 45;
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid var(--vc-border);
+    background: var(--vc-surface);
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.mobile-tab-bar a,
+.mobile-tab-bar button {
+    position: relative;
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 56px;
+    padding: 0.45rem 0.125rem;
+    color: var(--vc-text-dim);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s ease;
+}
+
+.mobile-tab-bar a:hover,
+.mobile-tab-bar button:hover {
+    color: var(--vc-text);
+}
+
+.mobile-tab-bar a.active-tab,
+.mobile-tab-bar .tab-active {
+    color: var(--vc-accent);
+}
+
+.mobile-tab-bar a.active-tab svg,
+.mobile-tab-bar .tab-active svg {
+    filter: drop-shadow(0 0 6px var(--vc-accent));
+}
+
+.mobile-tab-bar a.active-tab::before,
+.mobile-tab-bar .tab-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline: 1.5rem;
+    height: 2px;
+    border-radius: 9999px;
+    background: var(--vc-accent);
+}
+
+/* The tab bar only exists below desktop; ≥ lg the desktop rail replaces it. */
+@media (min-width: 1025px) {
+    .mobile-tab-bar {
+        display: none;
+    }
+}
+
+/* ── Input reveal toggles (base default) ──────────────────────────────────
+   Password show/hide and icon buttons inside inputs must always present a
+   ≥ 44px tap target, even though the glyph itself is small. ── */
+.zkpm-reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 0.75rem;
+}
+
+/* ── Lock / unlock modal: keyboard-safe on mobile (base default) ──────────
+   The modal is top-anchored on phones with modest vertical padding so the
+   Master Password field and unlock buttons stay within the visible area when
+   the on-screen keyboard is open. Desktop resumes perfect vertical centring
+   as the enhancement via `md:justify-center`. ── */
+.lock-modal-card {
+    max-height: calc(100vh - 2.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+    .lock-modal-card {
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+/* ── OTP / code entry (base default) ──────────────────────────────────────
+   Six-digit codes stay at a large 1.5rem on EVERY viewport — already above
+   the 16px iOS auto-zoom threshold, so it is safe. Declared after the base
+   16px `!important` floor (and also `!important`) so it wins; keeps the
+   code field readable and tappable on phones. ── */
+.zkpm-otp-input {
+    font-size: 1.5rem !important;
 }
 
 @layer utilities {

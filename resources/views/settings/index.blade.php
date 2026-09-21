@@ -22,7 +22,7 @@
             {{-- Quick actions --}}
             <div class="glass-card p-5">
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3">{{ __('Quick Actions') }}</h3>
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     <a href="{{ route('dashboard') }}" class="zkpm-stat-card hover:no-underline">
                         <span class="zkpm-stat-icon"><x-icon-vault class="w-5 h-5" /></span>
                         <span>
@@ -159,7 +159,7 @@
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ __('Manage your profile, passkeys, and authentication preferences.') }}</p>
                     </div>
                 </div>
-                <a href="{{ route('profile.edit') }}" class="zkpm-btn-secondary shrink-0">{{ __('Review account settings') }}</a>
+                <a href="{{ route('profile.edit') }}" class="zkpm-btn-secondary w-full sm:w-auto shrink-0">{{ __('Review account settings') }}</a>
             </div>
 
         </div>

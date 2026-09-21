@@ -32,7 +32,7 @@
                 <x-input-error :messages="$errors->userDeletion->get('email')" class="mt-2" />
             </div>
 
-            <div class="mt-6 flex justify-end gap-3">
+            <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}
                 </x-secondary-button>

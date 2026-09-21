@@ -1,6 +1,6 @@
 {
   "node_modules/qrcode/lib/browser.js": {
-    "file": "assets/browser-fafXhJiv.js",
+    "file": "assets/browser-ep7MRpdo.js",
     "name": "browser",
     "src": "node_modules/qrcode/lib/browser.js",
     "isDynamicEntry": true,
@@ -9,7 +9,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-BqXFjCkb.css",
+    "file": "assets/app-CdoVHTcl.css",
     "name": "app",
     "names": [
       "app.css"
@@ -18,7 +18,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-B_35Qhfe.js",
+    "file": "assets/app-CiS35skj.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -35,7 +35,7 @@
     "isDynamicEntry": true
   },
   "resources/js/vault.js": {
-    "file": "assets/vault-q2AztVQ5.js",
+    "file": "assets/vault-aIHYRDvK.js",
     "name": "vault",
     "src": "resources/js/vault.js",
     "isDynamicEntry": true,

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="zkpm-page-header">
                     {{ __('Decrypted Vault') }}
@@ -9,16 +9,16 @@
                     {{ __('Client-side AES-256-GCM zero-knowledge encrypted credentials') }}
                 </p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-col sm:flex-row gap-2">
                 <button type="button"
                         id="manage-categories-btn"
-                        class="zkpm-btn-secondary">
+                        class="zkpm-btn-secondary w-full sm:w-auto">
                     <x-icon-category class="w-4 h-4 text-slate-500" />
                     {{ __('Categories') }}
                 </button>
                 <button type="button"
                         id="vault-add"
-                        class="zkpm-btn-primary">
+                        class="zkpm-btn-primary w-full sm:w-auto">
                     <x-icon-plus class="w-4 h-4" />
                     {{ __('Add Item') }}
                 </button>

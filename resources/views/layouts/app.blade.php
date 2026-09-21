@@ -48,9 +48,11 @@
             {{-- Content column: on desktop, offset by the fixed sidebar width
                  (64px mini rail / 256px expanded panel) using logical
                  `padding-inline-start` so it flips automatically in RTL.
-                 On mobile/tablet the drawer overlays, so no offset. --}}
+                 On mobile/tablet the drawer overlays, so no offset. The
+                 `padding-bottom` reserved on phones sits under the fixed
+                 mobile tab bar (+ safe-area) and is released at desktop. --}}
             <div :class="$store.sidebar.expanded ? 'lg:ps-64' : 'lg:ps-16'"
-                 class="transition-[padding-inline-start] duration-300 ease-in-out">
+                 class="transition-[padding-inline-start] duration-300 ease-in-out [padding-bottom:calc(4.5rem+env(safe-area-inset-bottom))] lg:[padding-bottom:0]">
                 @isset($header)
                     <header class="border-b bg-[var(--vc-surface)] border-[var(--vc-border)]">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -67,6 +69,9 @@
             </div>
 
             @include('components.lock-modal')
+
+            {{-- Mobile-first primary navigation — bottom tab bar, hidden ≥ lg. --}}
+            <x-mobile-tab-bar />
         </div>
 
         @include('components.toast-notifications')

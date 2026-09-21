@@ -53,11 +53,11 @@
                        :type="show ? 'text' : 'password'"
                        placeholder="••••••••••••"
                        data-capslock data-capslock-hint="register-caps-hint"
-                       class="zkpm-input ps-9 pe-10">
+                       class="zkpm-input ps-9 pe-12">
                 <button type="button"
                         @click="show = ! show"
                         :aria-label="show ? 'Hide' : 'Reveal'"
-                        class="absolute end-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200 active:scale-90">
+                        class="zkpm-reveal-btn absolute end-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200 active:scale-90">
                     <x-icon-biometric x-show="! show" class="h-4 w-4" />
                 </button>
             </div>
@@ -96,11 +96,11 @@
                        :type="show ? 'text' : 'password'"
                        placeholder="••••••••••••"
                        data-capslock data-capslock-hint="register-caps-hint-confirm"
-                       class="zkpm-input ps-9 pr-10">
+                       class="zkpm-input ps-9 pe-12">
                 <button type="button"
                         @click="show = ! show"
                         :aria-label="show ? 'Hide' : 'Reveal'"
-                        class="absolute end-2.5 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200 active:scale-90">
+                        class="zkpm-reveal-btn absolute end-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition dark:hover:text-slate-200 active:scale-90">
                     <x-icon-biometric x-show="! show" class="h-4 w-4" />
                 </button>
             </div>

@@ -26,8 +26,8 @@
 const SIDEBAR_STORAGE_KEY = 'zkpm_sidebar';
 const SIDEBAR_GROUP_PREFIX = 'zkpm_sidebar_group_';
 
-/** Breakpoint (px) matching Tailwind's `lg` (1024px). */
-const DESKTOP_BREAKPOINT = 1024;
+/** Breakpoint (px) matching Tailwind's `lg` (1025px) — mobile-first desktop. */
+const DESKTOP_BREAKPOINT = 1025;
 
 /** Toggle the CSS variation class emitted for host pages (optional styling hook). */
 let doc = () => document.documentElement;

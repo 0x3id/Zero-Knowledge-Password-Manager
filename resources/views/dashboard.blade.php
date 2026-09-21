@@ -17,11 +17,11 @@
                 </p>
             </div>
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <a href="{{ route('vault') }}" class="zkpm-btn-secondary justify-center">
+                <a href="{{ route('vault') }}" class="zkpm-btn-secondary justify-center w-full sm:w-auto">
                     <x-icon-vault class="h-5 w-5" />
                     {{ __('Open Vault') }}
                 </a>
-                <a href="{{ route('generator') }}" class="zkpm-btn-primary justify-center">
+                <a href="{{ route('generator') }}" class="zkpm-btn-primary justify-center w-full sm:w-auto">
                     <x-icon-generator class="h-5 w-5" />
                     {{ __('Generate Password') }}
                 </a>
@@ -32,9 +32,11 @@
     <div class="py-8">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Core counters --}}
-            <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
-                <div class="glass-card p-5 flex items-center gap-4">
+            {{-- Core counters — MOBILE-FIRST: a single horizontally swipeable
+                 snap row for a fast glance at the numbers one-handed; the
+                 multi-column grid only returns from `md` (768px) up. --}}
+            <div class="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible md:px-0 md:pb-0">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                         <x-icon-vault class="h-5 w-5" />
                     </div>
@@ -44,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl {{ $counts['weak_passwords'] > 0 ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' }} flex items-center justify-center">
                         <x-icon-breach class="h-5 w-5" />
                     </div>
@@ -61,7 +63,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                         <x-icon-category class="h-5 w-5" />
                     </div>
@@ -71,7 +73,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                         <x-icon-key class="h-5 w-5" />
                     </div>
@@ -81,7 +83,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center">
                         <x-icon-generator class="h-5 w-5" />
                     </div>
@@ -91,7 +93,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                         <x-icon-audit-log class="h-5 w-5" />
                     </div>
@@ -101,7 +103,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center">
                         <x-icon-devices class="h-5 w-5" />
                     </div>
@@ -111,7 +113,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center">
                         <x-icon-webauthn class="h-5 w-5" />
                     </div>
@@ -121,7 +123,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl {{ $twoFactor['totp'] && $twoFactor['webauthn'] ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400' }} flex items-center justify-center">
                         <x-icon-webauthn class="h-5 w-5" />
                     </div>
@@ -137,7 +139,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-5 flex items-center gap-4">
+                <div class="glass-card p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shrink-0 min-w-[9.5rem] snap-start md:shrink md:min-w-0">
                     <div class="shrink-0 h-11 w-11 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                         <x-icon-clock class="h-5 w-5" />
                     </div>
@@ -224,33 +226,35 @@
                 </div>
             </div>
 
-            {{-- Quick actions --}}
-            <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-                <a href="{{ route('vault', ['add' => 1]) }}" class="glass-card group flex items-center justify-center gap-2.5 rounded-xl border p-5 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm">
+            {{-- Quick actions — MOBILE-FIRST: full-width, thumb-friendly stacked
+                 rows one-handed; only become a compact centred grid from
+                 `sm` up. --}}
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+                <a href="{{ route('vault', ['add' => 1]) }}" class="glass-card group flex items-center justify-start gap-3 rounded-xl border px-4 py-4 min-h-16 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm sm:justify-center sm:gap-2.5 sm:px-5 sm:py-5">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--vc-accent-soft)] text-[var(--vc-accent)] transition group-hover:scale-110">
                         <x-icon-plus class="h-5 w-5" />
                     </span>
                     <span class="text-sm font-bold text-[var(--vc-text)]">{{ __('Add Item') }}</span>
                 </a>
-                <a href="{{ route('generator') }}" class="glass-card group flex items-center justify-center gap-2.5 rounded-xl border p-5 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm">
+                <a href="{{ route('generator') }}" class="glass-card group flex items-center justify-start gap-3 rounded-xl border px-4 py-4 min-h-16 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm sm:justify-center sm:gap-2.5 sm:px-5 sm:py-5">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--vc-accent-soft)] text-[var(--vc-accent)] transition group-hover:scale-110">
                         <x-icon-generator class="h-5 w-5" />
                     </span>
                     <span class="text-sm font-bold text-[var(--vc-text)]">{{ __('Generate Password') }}</span>
                 </a>
-                <a href="{{ route('settings') }}" class="glass-card group flex items-center justify-center gap-2.5 rounded-xl border p-5 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm">
+                <a href="{{ route('settings') }}" class="glass-card group flex items-center justify-start gap-3 rounded-xl border px-4 py-4 min-h-16 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm sm:justify-center sm:gap-2.5 sm:px-5 sm:py-5">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--vc-accent-soft)] text-[var(--vc-accent)] transition group-hover:scale-110">
                         <x-icon-security class="h-5 w-5" />
                     </span>
                     <span class="text-sm font-bold text-[var(--vc-text)]">{{ __('Security Checkup') }}</span>
                 </a>
-                <a href="{{ route('audit-logs.index') }}" class="glass-card group flex items-center justify-center gap-2.5 rounded-xl border p-5 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm">
+                <a href="{{ route('audit-logs.index') }}" class="glass-card group flex items-center justify-start gap-3 rounded-xl border px-4 py-4 min-h-16 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm sm:justify-center sm:gap-2.5 sm:px-5 sm:py-5">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--vc-accent-soft)] text-[var(--vc-accent)] transition group-hover:scale-110">
                         <x-icon-audit-log class="h-5 w-5" />
                     </span>
                     <span class="text-sm font-bold text-[var(--vc-text)]">{{ __('Audit Log') }}</span>
                 </a>
-                <a href="{{ route('sessions.index') }}" class="glass-card group flex items-center justify-center gap-2.5 rounded-xl border p-5 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm">
+                <a href="{{ route('sessions.index') }}" class="glass-card group flex items-center justify-start gap-3 rounded-xl border px-4 py-4 min-h-16 transition hover:border-[color:var(--vc-accent)]/50 hover:shadow-glow-sm sm:justify-center sm:gap-2.5 sm:px-5 sm:py-5">
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--vc-accent-soft)] text-[var(--vc-accent)] transition group-hover:scale-110">
                         <x-icon-devices class="h-5 w-5" />
                     </span>

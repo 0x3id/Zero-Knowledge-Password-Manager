@@ -1,6 +1,6 @@
 {{-- Inline vault unlock form (shown when encryption key is not in memory) --}}
 <div id="unlock-form-container">
-    <form id="unlock-form" class="glass-card p-8 max-w-lg mx-auto text-center space-y-5 animate-scale-in">
+    <form id="unlock-form" class="glass-card p-6 sm:p-8 max-w-lg mx-auto text-center space-y-5 animate-scale-in">
         @csrf
         <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-glow-sm">
             <x-icon-lock class="w-7 h-7" />
